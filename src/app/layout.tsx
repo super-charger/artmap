@@ -12,9 +12,11 @@ import { ENV } from '@/configs/env'
 import { COOKIE_KEYS } from '@/constants/cookie-keys'
 import AppProvider from '@/providers/AppProvider'
 import { ThemeProvider } from '@/providers/ThemeProvider'
+import fonts from '@/theme/fonts'
 
 // import { GoogleAnalytics } from "@next/third-parties/google";
-import '../../public/fonts/pretendard/css/pretendardvariable-dynamic-subset.css'
+// import '../../public/fonts/pretendard/css/pretendardvariable-dynamic-subset.css'
+import '../css/index.css'
 
 /**
  *
@@ -105,7 +107,7 @@ export default async function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>{/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}</head>
-      <body suppressHydrationWarning>
+      <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
         <AppProvider>
           <ThemeProvider
             colorMode={cookies().get(COOKIE_KEYS.COLOR_MODE)?.value}

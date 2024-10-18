@@ -5,8 +5,8 @@ import React from 'react'
 import { CacheProvider } from '@chakra-ui/next-js'
 import { ChakraProvider, ColorModeScript } from '@chakra-ui/react'
 
-import theme from '@/configs/theme'
-import fonts from '@/configs/theme/foundations/typography/fonts'
+import theme from '@/configs/_legacy-theme'
+import fonts from '@/configs/_legacy-theme/foundations/typography/fonts'
 import { COOKIE_KEYS } from '@/constants/cookie-keys'
 import { clientCookie } from '@/stores/cookie/store'
 

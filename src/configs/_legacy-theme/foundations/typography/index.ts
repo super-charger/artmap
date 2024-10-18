@@ -18,6 +18,7 @@ const declaredNextFontsMock: DeclaredFontsType = {
   body: '', // for body
   heading: '', // for heading component
   Akronim: '',
+  notoSansKR: '',
   'Pretendard Variable': '',
 }
 
