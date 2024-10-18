@@ -109,13 +109,7 @@ export default async function RootLayout({
       <head>{/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}</head>
       <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
         <AppProvider>
-          <ThemeProvider
-            colorMode={cookies().get(COOKIE_KEYS.COLOR_MODE)?.value}
-          >
-            <HomeLayout content={children} />
-            <ToggleColorModeButton />
-            <OpenBtn target={<TokGuideDrawer />} button={<SideBtn />} />
-          </ThemeProvider>
+          <HomeLayout content={children} />
         </AppProvider>
       </body>
     </html>
