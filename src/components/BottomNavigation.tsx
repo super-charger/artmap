@@ -1,13 +1,29 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { useEffect } from 'react'
 
-import { navs } from '@/constants/routes'
+import Link, { LinkProps } from 'next/link'
+import { useRouter } from 'next/navigation'
+
+import { PAGE_ROUTES, navs } from '@/constants/routes'
+import useActiveNavItems from '@/hooks/useActiveNavItems'
 import { cn } from '@/utils/utils'
 
+type IconProps = {
+  width: number
+  height: number
+}
+
+type NavItemProps<T = string> = {
+  label: string
+  href: LinkProps<T>['href']
+  isActive: boolean
+  Icon: React.ComponentType<IconProps>
+  ActiveIcon: React.ComponentType<IconProps>
+}
+
 export default function BottomNavigation() {
-  const pathname = usePathname()
+  const { navItems } = useActiveNavItems(navs)
 
   return (
     <nav className="relative">
@@ -19,34 +35,37 @@ export default function BottomNavigation() {
         )}
       >
         <div className="mx-auto grid h-full max-w-lg grid-cols-5 items-center">
-          {navs.map((link) => {
-            const LinkIcon = link.icon
-            const ActiveLinkIcon = link.activeIcon
-            const isActive = pathname === link.pathname
-            return (
-              <Link
-                key={link.pathname}
-                href={link.pathname}
-                className="group inline-flex h-[46px] flex-col items-center justify-between px-5"
-              >
-                {isActive ?
-                  <ActiveLinkIcon width={24} height={24} />
-                : <LinkIcon width={24} height={24} />}
-                <p
-                  className={cn(
-                    'whitespace-nowrap text-center text-xs leading-[18px] text-grayscale_gray4',
-                    {
-                      'text-grayscale_black': isActive,
-                    },
-                  )}
-                >
-                  {link.label}
-                </p>
-              </Link>
-            )
-          })}
+          {navItems.map((item) => (
+            <NavItem
+              key={item.pathname}
+              href={item.pathname}
+              isActive={item.isActive}
+              Icon={item.icon}
+              ActiveIcon={item.activeIcon}
+              label={item.label}
+            />
+          ))}
         </div>
       </div>
     </nav>
   )
 }
+
+const NavItem = ({ href, isActive, Icon, ActiveIcon, label }: NavItemProps) => (
+  <Link
+    href={href}
+    className="group inline-flex h-[46px] flex-col items-center justify-between px-5"
+  >
+    {isActive ?
+      <ActiveIcon width={24} height={24} />
+    : <Icon width={24} height={24} />}
+    <p
+      className={cn(
+        'whitespace-nowrap text-center text-xs leading-[18px]',
+        isActive ? 'text-grayscale_black' : 'text-grayscale_gray4',
+      )}
+    >
+      {label}
+    </p>
+  </Link>
+)
