@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
+    "@faker-js/faker": "^9.0.3",
     "@next/bundle-analyzer": "^14.2.4",
     "@next/eslint-plugin-next": "^14.2.4",
     "@testing-library/jest-dom": "^6.4.6",

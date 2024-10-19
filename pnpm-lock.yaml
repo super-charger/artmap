@@ -101,6 +101,9 @@ importers:
       '@chakra-ui/cli':
         specifier: ^2.4.1
         version: 2.4.1
+      '@faker-js/faker':
+        specifier: ^9.0.3
+        version: 9.0.3
       '@next/bundle-analyzer':
         specifier: ^14.2.4
         version: 14.2.4
@@ -1230,6 +1233,10 @@ packages:
 
   '@exodus/schemasafe@1.3.0':
     resolution: {integrity: sha512-5Aap/GaRupgNx/feGBwLLTVv8OQFfv3pq2lPRzPg9R+IOBnDgghTGW7l7EuVXOvg5cc/xSAlRW8rBrjIC3Nvqw==}
+
+  '@faker-js/faker@9.0.3':
+    resolution: {integrity: sha512-lWrrK4QNlFSU+13PL9jMbMKLJYXDFu3tQfayBsMXX7KL/GiQeqfB1CzHkqD5UHBUtPAuPo6XwGbMFNdVMZObRA==}
+    engines: {node: '>=18.0.0', npm: '>=9.0.0'}
 
   '@floating-ui/core@1.6.2':
     resolution: {integrity: sha512-+2XpQV9LLZeanU4ZevzRnGFg2neDeKHgFLjP6YLW+tly0IvrhqT4u8enLGjLH3qeh85g19xY5rsAusfwTdn5lg==}
@@ -5530,7 +5537,7 @@ snapshots:
 
   '@emotion/styled@11.11.5(@emotion/react@11.11.4(@types/react@18.3.3)(react@18.3.1))(@types/react@18.3.3)(react@18.3.1)':
     dependencies:
-      '@babel/runtime': 7.24.7
+      '@babel/runtime': 7.25.4
       '@emotion/babel-plugin': 11.11.0
       '@emotion/is-prop-valid': 1.2.2
       '@emotion/react': 11.11.4(@types/react@18.3.3)(react@18.3.1)
@@ -5714,6 +5721,8 @@ snapshots:
   '@eslint/js@8.57.0': {}
 
   '@exodus/schemasafe@1.3.0': {}
+
+  '@faker-js/faker@9.0.3': {}
 
   '@floating-ui/core@1.6.2':
     dependencies:
