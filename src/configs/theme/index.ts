@@ -1,11 +1,9 @@
-import { extendTheme } from '@chakra-ui/react'
-
 import { components } from './components'
 import { foundations } from './foundations'
 
-const overrides = {
+const coveredTheme = {
   components,
   ...foundations,
 }
 
-export default extendTheme(overrides)
+export default coveredTheme
