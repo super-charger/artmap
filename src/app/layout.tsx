@@ -1,20 +1,15 @@
 import { ReactNode } from 'react'
 
 import { Metadata, Viewport } from 'next'
-import { cookies } from 'next/headers'
 
-import { TokGuideDrawer } from '@/components/@Drawer/TokGuideDrawer'
-import { SideBtn } from '@/components/@Drawer/TokGuideDrawer/components/SideBtn'
 import HomeLayout from '@/components/@Layout/HomeLayout'
-import { OpenBtn } from '@/components/OpenBtn'
-import ToggleColorModeButton from '@/components/ToggleColorModeButton'
+import BottomNavigation from '@/components/BottomNavigation'
 import { ENV } from '@/configs/env'
-import { COOKIE_KEYS } from '@/constants/cookie-keys'
 import AppProvider from '@/providers/AppProvider'
-import { ThemeProvider } from '@/providers/ThemeProvider'
+import fonts from '@/theme/fonts'
 
 // import { GoogleAnalytics } from "@next/third-parties/google";
-import '../../public/fonts/pretendard/css/pretendardvariable-dynamic-subset.css'
+import '../css/index.css'
 
 /**
  *
@@ -105,16 +100,8 @@ export default async function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>{/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}</head>
-      <body suppressHydrationWarning>
-        <AppProvider>
-          <ThemeProvider
-            colorMode={cookies().get(COOKIE_KEYS.COLOR_MODE)?.value}
-          >
-            <HomeLayout content={children} />
-            <ToggleColorModeButton />
-            <OpenBtn target={<TokGuideDrawer />} button={<SideBtn />} />
-          </ThemeProvider>
-        </AppProvider>
+      <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   )

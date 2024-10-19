@@ -2,60 +2,28 @@
 
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 
-import {
-  ContainerProps,
-  Grid,
-  GridItem,
-  GridItemProps,
-  keyframes,
-} from '@chakra-ui/react'
-
 import { LAYOUT } from '@/constants/layout'
+import { cn } from '@/utils/utils'
 
 import HomeFooter from './components/HomeFooter'
 import HomeHeader from './components/HomeHeader'
 
 interface HomeLayoutProps {
-  header?: ReactNode
+  header?: ReactNode | ((props: { isScroll: boolean }) => ReactNode)
   footer?: ReactNode
   content?: ReactNode
-  containerProps?: ContainerProps
 }
-const bounceAnimation = keyframes`
-  0% {  transform: translateY(-100px); }
-  60% {  transform: translateY(10px); }
-  80% {  transform: translateY(-5px); }
-  100% {  transform: translateY(0px); }
-`
+
 const HomeLayout = ({
-  //
-  header = <HomeHeader />,
+  header = ({ isScroll }) => <HomeHeader isScroll={isScroll} />,
   footer = <HomeFooter />,
-  containerProps,
   content,
 }: HomeLayoutProps) => {
   const [isScroll, setIsScroll] = useState(false)
 
   const handleScroll = useCallback(() => {
-    setIsScroll(window.scrollY > 66)
+    setIsScroll(window.scrollY > 60)
   }, [])
-
-  const scrollConfig: GridItemProps =
-    isScroll ?
-      {
-        top: `-10px`,
-        h: `calc(${LAYOUT.HEADER.HEIGHT} + 10px)`,
-        boxShadow: 'card',
-        pt: '10px',
-        animation: `${bounceAnimation} 0.8s`,
-      }
-    : {
-        top: 0,
-        h: LAYOUT.HEADER.HEIGHT,
-        boxShadow: 'none',
-        pt: '0',
-        animation: 'none',
-      }
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
@@ -65,42 +33,26 @@ const HomeLayout = ({
   }, [handleScroll])
 
   return (
-    <Grid
-      w={'100%'}
-      minW={'100%'}
-      minH={'100vh'}
-      pos={'relative'}
-      gridAutoColumns={'1fr'}
-      bg={'background.basic.1'}
-      gridTemplateRows={`${LAYOUT.HEADER.HEIGHT} 1fr auto`}
-      templateAreas={`"header" "main" "footer"`}
+    <div
+      className={cn(
+        'relative',
+        'm-auto min-h-screen w-full min-w-80 max-w-screen-sm',
+      )}
     >
-      <GridItem
-        area={'header'}
-        as={'header'}
-        position="sticky"
-        zIndex="sticky"
-        w={'100%'}
-        display="flex"
-        justifyContent={'center'}
-        pt={isScroll ? '10px' : '0'}
-        {...scrollConfig}
+      <header
+        className={cn(
+          `h-[${LAYOUT.HEADER.HEIGHT}]`,
+          'fixed top-0 z-50 flex w-full max-w-screen-sm',
+          'flex items-center justify-center',
+          'transition-colors duration-300 ease-in-out',
+          isScroll ? 'bg-grayscale_white' : 'bg-transparent',
+        )}
       >
-        {header}
-      </GridItem>
-      <GridItem
-        as={'main'}
-        area={'main'}
-        w={'100%'}
-        minW={'100%'}
-        {...containerProps}
-      >
-        {content}
-      </GridItem>
-      <GridItem area={'footer'} as={'footer'} h={'100%'} w={'100%'} py={'30px'}>
-        {footer}
-      </GridItem>
-    </Grid>
+        {typeof header === 'function' ? header({ isScroll }) : header}
+      </header>
+      <main className={'w-full min-w-full'}>{content}</main>
+      <footer className="w-full py-[30px]">{footer}</footer>
+    </div>
   )
 }
 
