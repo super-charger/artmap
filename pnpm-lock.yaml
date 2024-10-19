@@ -101,18 +101,15 @@ importers:
       '@chakra-ui/cli':
         specifier: ^2.4.1
         version: 2.4.1
-<<<<<<< HEAD
       '@faker-js/faker':
         specifier: ^9.0.3
         version: 9.0.3
-=======
       '@commitlint/cli':
         specifier: ^19.5.0
         version: 19.5.0(@types/node@20.14.2)(typescript@5.4.5)
       '@commitlint/config-conventional':
         specifier: ^19.5.0
         version: 19.5.0
->>>>>>> d9a6c82 (feat: tokit-app 기반 초기 세팅 확장)
       '@next/bundle-analyzer':
         specifier: ^14.2.4
         version: 14.2.4

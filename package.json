@@ -53,12 +53,9 @@
   },
   "devDependencies": {
     "@chakra-ui/cli": "^2.4.1",
-<<<<<<< HEAD
     "@faker-js/faker": "^9.0.3",
-=======
     "@commitlint/cli": "^19.5.0",
     "@commitlint/config-conventional": "^19.5.0",
->>>>>>> d9a6c82 (feat: tokit-app 기반 초기 세팅 확장)
     "@next/bundle-analyzer": "^14.2.4",
     "@next/eslint-plugin-next": "^14.2.4",
     "@testing-library/jest-dom": "^6.4.6",
