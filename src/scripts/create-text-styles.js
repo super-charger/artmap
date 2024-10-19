@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 
 const TOKEN_NAME = 'textStyles'
-
 const TOKEN_JSON_PATH = path.resolve(process.cwd(), 'public', 'token.json')
 const OUTPUT_PATH = path.resolve(
   process.cwd(),
