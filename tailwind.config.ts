@@ -35,6 +35,7 @@ const config: Config = {
           'font-family': theme('fontFamily.sans'),
           '-webkit-font-smoothing': 'antialiased',
           '-moz-osx-font-smoothing': 'grayscale',
+          color: theme('colors.grayscale_black'),
         },
         'img, picture, video, canvas, svg': {
           display: 'block',
