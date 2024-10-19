@@ -6,7 +6,7 @@ import { Button, Center, Flex, Text } from '@chakra-ui/react'
 
 import AppProvider from '@/providers/AppProvider'
 
-// import '../../public/fonts/pretendard/css/pretendardvariable-dynamic-subset.css'
+import '../../public/fonts/pretendard/css/pretendardvariable-dynamic-subset.css'
 
 /**
  *

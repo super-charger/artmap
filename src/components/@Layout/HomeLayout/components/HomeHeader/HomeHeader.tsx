@@ -1,68 +1,62 @@
 'use client'
 
-import Link, { LinkProps } from 'next/link'
+import { Link } from '@chakra-ui/next-js'
+import { Flex, IconButton } from '@chakra-ui/react'
+import { useDisclosure } from '@chakra-ui/react'
+
+import { LogoIcon, MenuIcon } from 'generated/icons/MyIcons'
 
 import { LAYOUT } from '@/constants/layout'
-import { headers } from '@/constants/routes'
-import useActiveNavItems from '@/hooks/useActiveNavItems'
-import { cn } from '@/utils/utils'
+import { ROUTES } from '@/generated/path/routes'
 
-type HomeHeaderProps = {
-  isScroll: boolean
+import HomeHeaderDrawer from './components/HomeHeaderDrawer'
+import {
+  HOME_HEADER_VARIANTS,
+  HomeHeaderVariantType,
+} from './constants/variants'
+
+interface HomeHeaderProps {
+  variant?: HomeHeaderVariantType
 }
 
-type NavItemProps<T = string> = {
-  label: string
-  href: LinkProps<T>['href']
-  isActive: boolean
-  isScroll: HomeHeaderProps['isScroll']
-}
+const HomeHeader = ({ variant = 'light' }: HomeHeaderProps) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
-const HomeHeader = ({ isScroll }: HomeHeaderProps) => {
-  const { navItems } = useActiveNavItems(headers)
-
+  const cssByVariant = HOME_HEADER_VARIANTS[variant]
   return (
     <>
-      <nav
-        className={cn(
-          `h-[${LAYOUT.HEADER.HEIGHT}]`,
-          'flex items-center',
-          'w-full',
-          'p-[12px]',
-        )}
+      <Flex //
+        as="header"
+        px={{ base: '16px', md: '80px' }}
+        alignItems="center"
+        justifyContent="space-between"
+        position="fixed"
+        zIndex="sticky"
+        transition="all 0.3s"
+        w="100%"
+        h={LAYOUT.HEADER.HEIGHT}
+        {...cssByVariant.header}
       >
-        <ul className="flex gap-5">
-          {navItems.map((item) => {
-            return (
-              <NavItem
-                key={item.pathname}
-                href={item.pathname}
-                isActive={item.isActive}
-                label={item.label}
-                isScroll={isScroll}
-              />
-            )
-          })}
-        </ul>
-      </nav>
+        <Link variant={'unstyled'} href={ROUTES.MAIN}>
+          <LogoIcon boxSize={'74px'} color={'brand.primary.500'} />
+        </Link>
+        <IconButton //
+          size={'xs'}
+          color={cssByVariant.pointColor}
+          icon={<MenuIcon w="24px" h="24px" />}
+          onClick={onOpen}
+          cursor="pointer"
+          bg="transparent"
+          aria-label="btn-toggle-drawer"
+        />
+      </Flex>
+      <HomeHeaderDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        bodyProps={cssByVariant.drawer}
+      />
     </>
   )
 }
-
-const NavItem = ({ href, isActive, label, isScroll }: NavItemProps) => (
-  <li
-    key={label}
-    className={cn(
-      'text-centertext-grayscale_gray4 mobile-extra-large font-bold uppercase text-grayscale_white opacity-50',
-      isScroll ? 'text-grayscale_gray3' : 'text-grayscale_white',
-      isActive ? 'opacity-100' : 'opacity-50',
-      {
-        'text-grayscale_black': isActive && isScroll,
-      },
-    )}
-  >
-    <Link href={href}>{label}</Link>
-  </li>
-)
 
 export default HomeHeader
