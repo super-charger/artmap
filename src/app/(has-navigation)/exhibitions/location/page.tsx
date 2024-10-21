@@ -1,9 +1,9 @@
-import { Metadata } from 'next'
-
-export const metadata: Metadata = {
-  title: '전시 위치',
-}
+import MapContainer from './_source/components/MapContainer'
 
 export default function ExhibitionsLocationPage() {
-  return <></>
+  return (
+    <>
+      <MapContainer />
+    </>
+  )
 }
