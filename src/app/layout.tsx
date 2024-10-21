@@ -2,8 +2,6 @@ import { ReactNode } from 'react'
 
 import { Metadata, Viewport } from 'next'
 
-import HomeLayout from '@/components/@Layout/HomeLayout'
-import BottomNavigation from '@/components/BottomNavigation'
 import { ENV } from '@/configs/env'
 import AppProvider from '@/providers/AppProvider'
 import fonts from '@/theme/fonts'
