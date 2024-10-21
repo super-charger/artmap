@@ -24,6 +24,8 @@ const colors = {
   dim50: 'rgba(26, 26, 26, 0.5)', // 1A1A1A의 50% 불투명도
   dim20: 'rgba(26, 26, 26, 0.2)', // 1A1A1A의 20% 불투명도
   button_text: '#FFFFFF',
+  now_poster1_background: '#F15113',
+  now_poster2_background: '#292929',
 
   backgroundImage: {
     gradient0: 'linear-gradient(to right, #000000, #757C86)',

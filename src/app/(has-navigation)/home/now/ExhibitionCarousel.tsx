@@ -1,12 +1,16 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import Image from 'next/image'
 
+// ExhibitionCarousel 임포트 추가
+import { getPopularExhibitions } from '@/actions/getExhibitions'
 import { MY_IMAGES } from '@/generated/path/images'
 
 import ExhibitionCarousel from './ExhibitionCarousel'
+
+// 데이터 fetching 함수 임포트
 
 interface Slide {
   background: string
@@ -22,6 +26,18 @@ export default function NowPage() {
   const [indicatorPosition, setIndicatorPosition] = useState<'left' | 'right'>(
     'left',
   )
+
+  // 전시 데이터 상태 선언
+  const [exhibitions, setExhibitions] = useState<any[]>([])
+
+  useEffect(() => {
+    // API 요청으로 전시 정보를 가져옴
+    async function fetchData() {
+      const { data } = await getPopularExhibitions()
+      setExhibitions(data)
+    }
+    fetchData()
+  }, [])
 
   // 슬라이드 데이터 정의
   const slides: Slide[] = [
@@ -53,10 +69,10 @@ export default function NowPage() {
   }
 
   return (
-    <div className="relative flex h-[642px] items-center justify-center">
+    <div className="relative flex flex-col items-center justify-center">
       {/* 상단 섹션: 배경 이미지와 가운데 정렬된 내용 */}
       <div
-        className={`relative flex h-full w-full items-center justify-center ${slides[currentSlide].background}`}
+        className={`relative flex h-[642px] w-full items-center justify-center ${slides[currentSlide].background}`}
         onClick={(e) => {
           const { left, width } = e.currentTarget.getBoundingClientRect()
           const clickX = e.clientX - left
@@ -106,6 +122,11 @@ export default function NowPage() {
           }}
         ></div>
       </div>
+
+      {/* Exhibition Carousel 추가 */}
+      {exhibitions.length > 0 && (
+        <ExhibitionCarousel exhibitions={exhibitions} />
+      )}
     </div>
   )
 }
