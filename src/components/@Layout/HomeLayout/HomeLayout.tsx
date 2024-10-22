@@ -51,7 +51,7 @@ const HomeLayout = ({
         {typeof header === 'function' ? header({ isScroll }) : header}
       </header>
       <main className={'w-full min-w-full'}>{content}</main>
-      <footer className="w-full py-[30px]">{footer}</footer>
+      <footer className="w-full py-[10px]">{footer}</footer>
     </div>
   )
 }
