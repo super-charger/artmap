@@ -1,17 +1,18 @@
+import Image from "next/image";
+
 export default function Page() {
     return (
         <div className="w-[375px] h-[812px] relative bg-white">
+            <div className="w-[375px] h-[30px] left-0 top-[782px] absolute">
+                <div className="w-[375px] h-[30px] left-0 top-0 absolute bg-white"/>
+                <div className="w-[130px] h-[5px] left-[122px] top-[20px] absolute bg-[#1a1a1a] rounded-sm"/>
+            </div>
             <div
                 className="left-[16px] top-[104px] absolute text-[#1a1a1a] text-xl font-bold font-['Noto Sans KR'] leading-[29px]">회원
                 종류를 선택하세요
             </div>
             <div className="w-[375px] h-[60px] left-0 top-[44px] absolute">
-                <div className="w-6 h-6 left-[16px] top-[18px] absolute">
-                    <div className="w-[18px] h-[18px] left-[3px] top-[3px] absolute">
-                        <div className="w-[16.05px] h-[13.55px] left-[1px] top-[2px] absolute">
-                        </div>
-                    </div>
-                </div>
+                            <Image src="/icons/arrow/black-left.svg" alt={"arrow icon"} width={24} height={24} className="absolute left-[16px] top-[18px]"/>
             </div>
             <div
                 className="w-[343px] h-[50px] px-[15px] left-[16px] top-[702px] absolute bg-[#bebebe] rounded-[5px] justify-center items-center gap-2.5 inline-flex">
