@@ -10,13 +10,22 @@ export async function getGroupedByArea() {
         id: true,
       },
     })
+
     const data = groupedByArea.map((row) => {
       const position = areaCenterCoordinates[row.area] || defaultPosition
+      let count = row._count.id
+
+      if (row.area === '서울' && count > 182) {
+        count = 182
+      }
+
       return {
         ...row,
         position,
+        _count: { id: count },
       }
     })
+
     return data
   } catch (error) {
     console.error('Error grouping exhibitions by area:', error)

@@ -4,7 +4,31 @@ import prisma from '@/apis/prismaClient'
 
 export async function getExhibitionsArea() {
   try {
-    const exhibitions = await prisma.exhibition.findMany({
+    const seoulExhibitions = await prisma.exhibition.findMany({
+      where: {
+        area: '서울',
+      },
+      select: {
+        id: true,
+        title: true,
+        gpsX: true,
+        gpsY: true,
+        thumbnail: true,
+        area: true,
+        startDate: true,
+        endDate: true,
+        place: true,
+        status: true,
+      },
+      take: 182,
+    })
+
+    const otherExhibitions = await prisma.exhibition.findMany({
+      where: {
+        area: {
+          not: '서울',
+        },
+      },
       select: {
         id: true,
         title: true,
@@ -18,10 +42,11 @@ export async function getExhibitionsArea() {
         status: true,
       },
     })
-    return exhibitions
+
+    return [...seoulExhibitions, ...otherExhibitions]
   } catch (error) {
-    console.error('Error grouping exhibitions by area:', error)
-    throw new Error('An error occurred while grouping exhibitions')
+    console.error('Error fetching exhibitions:', error)
+    throw new Error('An error occurred while fetching exhibitions')
   } finally {
     await prisma.$disconnect()
   }

@@ -1,33 +1,26 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-import { MAP_CONSTANTS, MapElements } from '@/apis/exhibitions/types/model/map'
+import { MAP_CONSTANTS } from '@/apis/exhibitions/types/model/map'
+import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 
-interface OverlaysProps {
-  map: kakao.maps.Map
-  overlays: MapElements['overlays']
-  zoomLevel?: number
-}
-
-export default function Overlays({
-  map,
-  overlays,
-  zoomLevel = MAP_CONSTANTS.ZOOM.OVERLAY,
-}: OverlaysProps) {
+export default function Overlays() {
+  const { map, zoomLevel, visibleElements } = useMapStateContext()
   const overlaysRef = useRef<kakao.maps.CustomOverlay[]>([])
 
   // 모든 오버레이 제거 함수
-  const removeAlloverlays = useCallback(() => {
+  const removeAllOverlays = useCallback(() => {
     overlaysRef.current.forEach((overlay) => overlay.setMap(null))
     overlaysRef.current = []
   }, [])
 
   // 카카오 오버레이 로드 함수
-  const loadKakaoMarkers = useCallback(() => {
-    removeAlloverlays()
+  const loadKakaoOverlays = useCallback(() => {
+    if (!map) return
+    removeAllOverlays()
 
     if (zoomLevel < MAP_CONSTANTS.ZOOM.OVERLAY) return
 
-    const newOverlays = overlays?.map((overlay) => {
+    const newOverlays = visibleElements.overlays?.map((overlay) => {
       // 오버레이 콘텐츠 생성
       const content = document.createElement('div')
       content.className = 'custom-overlay'
@@ -53,18 +46,24 @@ export default function Overlays({
     })
 
     overlaysRef.current = newOverlays || []
-  }, [map, overlays, zoomLevel])
+  }, [map, visibleElements.overlays, zoomLevel])
 
   // 오버레이 로드 및 클린업
   useEffect(() => {
-    if (!map || !overlays) return
+    if (!map || !visibleElements.overlays) return
 
-    loadKakaoMarkers()
+    loadKakaoOverlays()
 
     return () => {
-      removeAlloverlays()
+      removeAllOverlays()
     }
-  }, [map, overlays, zoomLevel, loadKakaoMarkers, removeAlloverlays])
+  }, [
+    map,
+    visibleElements.overlays,
+    zoomLevel,
+    loadKakaoOverlays,
+    removeAllOverlays,
+  ])
 
-  return <></>
+  return null
 }
