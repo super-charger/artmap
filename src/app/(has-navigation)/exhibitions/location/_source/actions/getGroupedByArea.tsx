@@ -17,7 +17,6 @@ export async function getGroupedByArea() {
         position,
       }
     })
-
     return data
   } catch (error) {
     console.error('Error grouping exhibitions by area:', error)
@@ -31,7 +30,7 @@ interface AreaCoordinates {
   [key: string]: { lat: number; lng: number }
 }
 
-const defaultPosition = { lat: 36.5, lng: 127.5 } // 한국의 대략적인 중심 좌표
+const defaultPosition = { lat: 36.5, lng: 127.5 }
 
 const areaCenterCoordinates: AreaCoordinates = {
   서울: { lat: 37.5665, lng: 126.978 },
