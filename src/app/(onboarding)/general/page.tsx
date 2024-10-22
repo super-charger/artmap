@@ -18,20 +18,6 @@ export default function Page() {
     return (
         <>
             <div className="w-[375px] h-[812px] relative bg-white">
-                <div className="w-[375px] h-11 left-0 top-0 absolute">
-                    <div className="w-[68px] h-4 left-[293px] top-[15px] absolute">
-                        <div className="w-[25px] h-3 left-[43px] top-[2px] absolute">
-                            <div
-                                className="w-[22px] h-[11.33px] left-0 top-[0.33px] absolute opacity-30 rounded-sm border border-black"/>
-                            <div className="w-[18px] h-[7.33px] left-[2px] top-[2.33px] absolute bg-black rounded-sm"/>
-                        </div>
-                    </div>
-                    <div className="w-14 h-[23px] left-[21px] top-[8px] absolute">
-                        <div
-                            className="w-[54px] left-[0.33px] top-[6px] absolute text-center text-black text-[15px] font-semibold font-['SF Pro Text']">9:27
-                        </div>
-                    </div>
-                </div>
                 <div
                     className="left-[16px] top-[104px] absolute text-[#1a1a1a] text-xl font-bold font-['Noto Sans KR'] leading-[29px]">프로필
                     정보를 입력하세요.
