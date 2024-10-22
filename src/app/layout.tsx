@@ -2,11 +2,12 @@ import { ReactNode } from 'react'
 
 import { Metadata, Viewport } from 'next'
 
+// import { GoogleAnalytics } from "@next/third-parties/googl";
+import KakaoMapScript from '@/components/KakaoDevelopers/KakaoMapScript'
 import { ENV } from '@/configs/env'
 import AppProvider from '@/providers/AppProvider'
 import fonts from '@/theme/fonts'
 
-// import { GoogleAnalytics } from "@next/third-parties/google";
 import '../css/index.css'
 
 /**
@@ -97,7 +98,10 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <head>{/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}</head>
+      <head>
+        <KakaoMapScript />
+        {/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}
+      </head>
       <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
         <AppProvider>{children}</AppProvider>
       </body>

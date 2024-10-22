@@ -1,9 +1,11 @@
-import { Metadata } from 'next'
+import { MapStateProvider } from '@/app/_source/context/useMapStateContext'
 
-export const metadata: Metadata = {
-  title: '전시 위치',
-}
+import MapContainer from './_source/components/MapContainer'
 
 export default function ExhibitionsLocationPage() {
-  return <></>
+  return (
+    <MapStateProvider>
+      <MapContainer />
+    </MapStateProvider>
+  )
 }
