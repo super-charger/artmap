@@ -8,15 +8,10 @@ import {
   useGetExhibitionsAreaQuery,
   useGetGroupByAreaQuery,
 } from '@/apis/exhibitions/location/ExhibitionsLoctionApi.query'
-import { MAP_CONSTANTS } from '@/apis/exhibitions/types/model/map'
 import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 
 import Map from './Map'
 
-/**
- * 동적으로 로드할 컴포넌트들
- * - 초기 번들 사이즈 최적화를 위해 dynamic import 사용
- */
 const Overlays = dynamic(() => import('./Overlays'), { suspense: true })
 const Markers = dynamic(() => import('./Markers'), { suspense: true })
 
@@ -29,6 +24,8 @@ export default function MapContainer() {
     Array<{ target: any; type: string; handler: (...args: any[]) => void }>
   >([])
 
+  const rafRef = useRef<number>()
+
   // 데이터 fetching - staleTime 5분 설정
   const { data: overlayData } = useGetGroupByAreaQuery({
     options: { staleTime: 5 * 60 * 1000 },
@@ -36,6 +33,21 @@ export default function MapContainer() {
   const { data: markersData } = useGetExhibitionsAreaQuery({
     options: { staleTime: 5 * 60 * 1000 },
   })
+
+  // 드래그 중 지도 이벤트 발생 시 최적화를 위한 RAF
+  // - 드래그 할때마다 updateVisibleElements 호출 시 성능 저하 발생
+  const optimizedUpdate = useCallback(
+    (map: kakao.maps.Map, overlayData: any, markersData: any) => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current) // 이전 요청 취소
+      }
+
+      rafRef.current = requestAnimationFrame(() => {
+        updateVisibleElements(map, overlayData, markersData) // 새로운 프레임에서 업데이트
+      })
+    },
+    [updateVisibleElements],
+  )
 
   /**
    * 맵 이벤트 핸들러들
@@ -46,15 +58,15 @@ export default function MapContainer() {
     () => ({
       zoom_changed: () => {
         if (!map) return
-        setZoomLevel(map.getLevel())
-        updateVisibleElements(map, overlayData, markersData)
+        setZoomLevel(map.getLevel()) // 줌 레벨 변경 시
+        optimizedUpdate(map, overlayData, markersData)
       },
       bounds_changed: () => {
         if (!map) return
-        updateVisibleElements(map, overlayData, markersData)
+        optimizedUpdate(map, overlayData, markersData) // 지도 이동 시
       },
     }),
-    [map, setZoomLevel, updateVisibleElements, overlayData, markersData],
+    [map, setZoomLevel, optimizedUpdate, overlayData, markersData],
   )
 
   /**
@@ -79,6 +91,15 @@ export default function MapContainer() {
       kakao.maps.event.removeListener(target, type, handler)
     })
     eventListeners.current = []
+  }, [])
+
+  // RAF cleanup 추가
+  useEffect(() => {
+    return () => {
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+    }
   }, [])
 
   /**
