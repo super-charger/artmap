@@ -9,6 +9,7 @@ import AppProvider from '@/providers/AppProvider'
 import fonts from '@/theme/fonts'
 
 import '../css/index.css'
+import {MSWComponent} from "@/components/Nextauth/MSWComponent";
 
 /**
  *
@@ -103,6 +104,7 @@ export default async function RootLayout({
         {/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}
       </head>
       <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
+      <MSWComponent/>
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
