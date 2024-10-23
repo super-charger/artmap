@@ -21,7 +21,7 @@ export default function OnboardingLink({bgColor, children,href}: onboardingLinkP
 
     return (
         <Link href={href}
-            className={`${bgClass} w-11/12 h-[50px] px-[15px] rounded-[5px] justify-center items-center inline-flex z-20 relative`}>
+            className={`${bgClass} w-11/12 h-[50px] px-[15px] rounded-[5px] justify-center items-center inline-flex z-20 relative hover:opacity-75`}>
             <div className={`${textColor} text-base font-bold font-['Noto Sans KR'] leading-7 z-20`}>
                 {children}
             </div>
