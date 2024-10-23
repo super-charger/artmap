@@ -28,7 +28,6 @@ export default function Page() {
                     나와 가장 가까운 전시 정보
                 </div>
                 <div className="absolute bottom-32 w-full flex flex-col items-center gap-5">
-
                     <OnboardingLink bgColor={"purple"} href={"/aaaaaaaaaaaaaaa"}>
                         아트맵 회원가입
                     </OnboardingLink>
