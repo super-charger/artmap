@@ -1,4 +1,5 @@
 import {ReactNode} from "react";
+import OnboardingLayout from "@/components/Onboarding/OnboardingLayout";
 
 
 export default async function Layout({
@@ -7,6 +8,8 @@ export default async function Layout({
     children: ReactNode
 }) {
     return (
-        <div className="justify-center items-center flex bg-primary_sub h-dvh">{children}</div>
+        <OnboardingLayout>
+{children}
+        </OnboardingLayout>
     )
 }
