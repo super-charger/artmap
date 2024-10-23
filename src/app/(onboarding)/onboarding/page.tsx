@@ -29,7 +29,7 @@ export default function Page() {
                 </div>
                 <div className="absolute bottom-32 w-full flex flex-col items-center gap-5">
 
-                    <OnboardingLink bgColor={"purple"} href={"/error"}>
+                    <OnboardingLink bgColor={"purple"} href={"/aaaaaaaaaaaaaaa"}>
                         아트맵 회원가입
                     </OnboardingLink>
                     <OnboardingLink bgColor={"white"} href={"/login2"}>
