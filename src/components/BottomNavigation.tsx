@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 
 import { PAGE_ROUTES, navs } from '@/constants/routes'
 import useActiveNavItems from '@/hooks/useActiveNavItems'
-import { cn } from '@/utils/utils'
+import { cn } from '@/lib/utils'
 
 type IconProps = {
   width: number
