@@ -65,7 +65,7 @@ export default function NowPage() {
         // 곧 있을 전시 데이터를 가져오기
         const upcomingResponse = await getUpcomingExhibitions()
         const upcomingExhibitions = upcomingResponse.data
-        console.log(upcomingResponse)
+        console.log(upcomingExhibitions)
 
         // 두 개의 전시 데이터를 각각 배열로 넣음
         setExhibitionsData([ongoingExhibitions, upcomingExhibitions])
@@ -78,7 +78,6 @@ export default function NowPage() {
 
   return (
     <div className="flex flex-col items-center">
-      {/* 슬라이드 섹션 및 ExhibitionCarousel을 동일한 부모 컨테이너에 넣음 */}
       <div className="relative mx-auto w-[100%] max-w-[1200px]">
         {/* 슬라이드 섹션 */}
         <div className="relative mb-[30px] flex h-[642px] items-center justify-center">
@@ -127,15 +126,13 @@ export default function NowPage() {
           </div>
         </div>
 
-        {/* 진행 중인 전시회 Carousel */}
+        {/* 진행 중인 전시 Carousel */}
         {exhibitionsData[0] && (
           <ExhibitionCarousel exhibitions={exhibitionsData[0]}>
             진행 중인 전시
           </ExhibitionCarousel>
         )}
-
-        {/* 곧 있을 전시회 Carousel */}
-
+        {/* 다가오는 전시 Carousel */}
         <ExhibitionCarousel exhibitions={exhibitionsData[1]}>
           다가오는 전시
         </ExhibitionCarousel>
