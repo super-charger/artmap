@@ -104,7 +104,7 @@ export default async function RootLayout({
         {/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}
       </head>
       <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
-      <MSWComponent/>
+      {/*<MSWComponent/>*/}
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
