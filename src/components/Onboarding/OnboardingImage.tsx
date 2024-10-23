@@ -6,12 +6,10 @@ export default function OnboardingImage() {
     const [isVisible, setIsVisible] = useState(true);
 
     useEffect(() => {
-        // 3초 후에 이미지를 숨기기
         const timer = setTimeout(() => {
             setIsVisible(false);
-        }, 3000);
-
-        // 컴포넌트가 unmount 될 때 타이머를 정리
+        }, 1000);
+        
         return () => clearTimeout(timer);
     }, []);
 
@@ -19,7 +17,7 @@ export default function OnboardingImage() {
     return (
         <>
         {isVisible && (
-        <Image src={'/images/onboarding.png'} alt={"onboarding image"} width={600} height={0} className="h-full z-10 items-center justify-center flex absolute"/>
+        <Image src={'/images/onboarding.png'} alt={"onboarding image"} width={600} height={0} className="h-full z-50 items-center justify-center flex absolute"/>
         )}
         </>
     )
