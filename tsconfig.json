@@ -10,7 +10,7 @@
       "@/icons": ["./generated/icons/MyIcons.tsx"],
       "@/packageJSON": ["../package.json"]
     },
-    // "types": ["kakao.maps.d.ts"],
+    "types": ["kakao.maps.d.ts"],
     "incremental": true,
     "declaration": false,
     "moduleResolution": "Node",
