@@ -1,0 +1,17 @@
+.form-label {
+  @apply mobile-title font-bold text-grayscale_black;
+}
+
+button[role='radio'] {
+  @apply border-grayscale_gray3;
+}
+
+.custom-radio[data-state='checked'] {
+  @apply bg-grayscale_black;
+}
+
+.custom-radio[data-state='checked'] svg {
+  color: white;
+  width: 8px;
+  height: 8px;
+}
