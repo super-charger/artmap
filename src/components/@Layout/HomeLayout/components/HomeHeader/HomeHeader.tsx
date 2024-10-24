@@ -5,7 +5,7 @@ import Link, { LinkProps } from 'next/link'
 import { LAYOUT } from '@/constants/layout'
 import { headers } from '@/constants/routes'
 import useActiveNavItems from '@/hooks/useActiveNavItems'
-import { cn } from '@/utils/utils'
+import { cn } from '@/lib/utils'
 
 type HomeHeaderProps = {
   isScroll: boolean
