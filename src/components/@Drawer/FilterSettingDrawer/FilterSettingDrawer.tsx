@@ -1,5 +1,9 @@
 'use client'
 
+import { PropsWithChildren } from 'react'
+
+import { X } from 'lucide-react'
+
 import SystemMarginBottom from '@/components/SystemMarginBottom'
 import { Button } from '@/components/ui/button'
 import {
@@ -12,29 +16,30 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 
-import { FilterBtn } from './components/FilterBtn'
+import { FilterIconBtn } from './components/FilterIconBtn'
 
 type FilterSettingDrawerProps = {
   body?: React.ReactNode
-  footer?: React.ReactNode
+  footer: React.ReactNode
 }
 
 export const FilterSettingDrawer = ({
-  body,
-  footer,
+  children,
   ...props
-}: FilterSettingDrawerProps) => {
+}: PropsWithChildren) => {
   return (
     <Sheet {...props}>
       <SheetTrigger asChild>
-        <FilterBtn />
+        <FilterIconBtn />
       </SheetTrigger>
-      <SheetContent side="bottom" className="rounded-t-[10px] p-0">
+      <SheetContent
+        side="bottom"
+        className="m-auto max-w-screen-sm rounded-t-[10px] p-0"
+      >
         <SheetHeader className="flex items-center border-b-[1px] border-grayscale_gray2 pb-[16px] pt-[20px]">
           <SheetTitle>필터 설정</SheetTitle>
         </SheetHeader>
-        <div className="px-[16px]">{body}</div>
-        <>{footer}</>
+        {children}
       </SheetContent>
     </Sheet>
   )
