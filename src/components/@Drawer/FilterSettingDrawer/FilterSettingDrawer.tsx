@@ -2,26 +2,15 @@
 
 import { PropsWithChildren } from 'react'
 
-import { X } from 'lucide-react'
-
-import SystemMarginBottom from '@/components/SystemMarginBottom'
-import { Button } from '@/components/ui/button'
 import {
   Sheet,
-  SheetClose,
   SheetContent,
-  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
 
 import { FilterIconBtn } from './components/FilterIconBtn'
-
-type FilterSettingDrawerProps = {
-  body?: React.ReactNode
-  footer: React.ReactNode
-}
 
 export const FilterSettingDrawer = ({
   children,
