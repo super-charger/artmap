@@ -68,7 +68,7 @@ export default function NowPage() {
   return (
     <div className="flex flex-col items-center">
       {/* 슬라이드 섹션 및 ExhibitionCarousel을 동일한 부모 컨테이너에 넣음 */}
-      <div className="relative mx-auto w-[100%] max-w-[1200px]">
+      <div className="relative mx-auto w-[100%]">
         {/* 슬라이드 섹션 */}
         <div className="relative mb-[30px] flex h-[642px] items-center justify-center">
           {/* 상태바 */}
@@ -86,8 +86,11 @@ export default function NowPage() {
           <Swiper
             effect="fade"
             onSlideChange={(swiper) => {
+              // 슬라이더의 현재 인덱스 상태 업데이트
               setCurrentSlide(swiper.activeIndex)
             }}
+            allowSlidePrev={currentSlide !== 0} // 첫 번째 슬라이드에서 이전으로 넘어가지 않도록 설정
+            allowSlideNext={currentSlide !== slides.length - 1} // 마지막 슬라이드에서 다음으로 넘어가지 않도록 설정
             className="h-full w-full"
           >
             {slides.map((slide, index) => (
