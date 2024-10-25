@@ -5,13 +5,14 @@ import { PropsWithChildren, useState } from 'react'
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { VerticalArrowOpenSIcon } from '@/generated/icons/MyIcons'
 
-export default function LocationSettingDrawer({
+export default function LocationSettingSeet({
   children,
   ...props
 }: PropsWithChildren) {
@@ -28,12 +29,17 @@ export default function LocationSettingDrawer({
 
       <SheetContent
         side="top"
+        aria-describedby={undefined}
         className="m-auto max-w-screen-sm p-4 pt-5"
         buttonPosition="left"
       >
         <SheetHeader className="mobile-title mt-[6px] items-center rounded-t-md">
           <SheetTitle>위치 설정</SheetTitle>
+          <SheetDescription className="sr-only">
+            위치를 설정할 수 있습니다.
+          </SheetDescription>
         </SheetHeader>
+
         <div className="mt-4">{children}</div>
       </SheetContent>
     </Sheet>

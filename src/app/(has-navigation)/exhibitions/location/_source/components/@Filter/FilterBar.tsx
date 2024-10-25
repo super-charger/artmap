@@ -5,15 +5,15 @@ import { Button } from '@/components/ui/button'
 import { SheetClose } from '@/components/ui/sheet'
 
 import FilterSettingForm from './FilterSettingForm'
-import LocationSettingDrawer from './LocationSettingDrawer'
 import LocationSettingForm from './LocationSettingForm'
+import LocationSettingSeet from './LocationSettingSeet'
 
 const FilterBar = () => {
   return (
     <div className="absolute z-10 mx-auto w-full max-w-xl px-4 py-5">
       <div className="flex h-[40px] w-full items-center gap-2 rounded-full border border-gray-200 bg-grayscale_white px-4 py-2.5 shadow-sm">
         {/* 위치 설정 */}
-        <LocationSettingDrawer>
+        <LocationSettingSeet>
           <LocationSettingForm
             actions={
               <SheetClose asChild>
@@ -28,7 +28,7 @@ const FilterBar = () => {
               </SheetClose>
             }
           />
-        </LocationSettingDrawer>
+        </LocationSettingSeet>
 
         {/* 필터 설정 */}
         <FilterSettingSheet>

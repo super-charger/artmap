@@ -3,11 +3,18 @@
 import { useState } from 'react'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import '@radix-ui/react-dialog'
 
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 import {
   Form,
   FormControl,
@@ -144,14 +151,22 @@ export default function LocationSettingForm({
       {/* 도시 선택 다이얼로그 */}
       <Dialog open={isCityDialogOpen} onOpenChange={setIsCityDialogOpen}>
         <DialogContent
-          className="h-[100vh] w-full max-w-screen-sm sm:rounded-none"
           hideCloseButton
+          className="h-[100vh] w-full max-w-screen-sm sm:rounded-none"
         >
+          <DialogHeader className="sr-only">
+            <DialogTitle>도시 선택</DialogTitle>
+            <DialogDescription>
+              도시를 선택하여 위치를 설정할 수 있습니다
+            </DialogDescription>
+          </DialogHeader>
+
           <div className="flex items-center border-b p-2">
             <button type="button" onClick={() => setIsCityDialogOpen(false)}>
               <SystemXiconMBlackIcon width={32} height={32} />
             </button>
           </div>
+
           <div className="hide-scrollbar overflow-auto">
             {CITIES.map((city) => (
               <button
