@@ -32,6 +32,7 @@ export default function BottomNavigation() {
           'fixed bottom-0 left-0 right-0 z-50',
           'm-auto h-[58px] w-full min-w-80 max-w-screen-sm',
           'items-center bg-grayscale_white',
+          'border-color_gray2 border-t',
         )}
       >
         <div className="mx-auto grid h-full max-w-lg grid-cols-5 items-center">
