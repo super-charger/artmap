@@ -12,7 +12,7 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer'
 
-export default function LocationDrawer() {
+export default function ExhibitionListDrawer() {
   const [isOpen, setIsOpen] = useState(true)
 
   return (

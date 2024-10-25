@@ -1,8 +1,7 @@
 import { MapStateProvider } from '@/app/_source/context/useMapStateContext'
 
-import LocationDrawer from './_source/components/@ExhibitionList/LocationDrawer'
+import ExhibitionListDrawer from './_source/components/@ExhibitionList/ExhibitionListDrawer'
 import FilterBar from './_source/components/@Filter/FilterBar'
-import MapContainer from './_source/components/@MapContainer/MapContainer'
 
 export default function ExhibitionsLocationPage() {
   return (
@@ -10,7 +9,7 @@ export default function ExhibitionsLocationPage() {
       <div className="pointer-events-auto">
         <FilterBar />
         {/* <MapContainer /> */}
-        <LocationDrawer />
+        <ExhibitionListDrawer />
       </div>
     </MapStateProvider>
   )
