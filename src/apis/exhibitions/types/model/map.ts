@@ -1,4 +1,9 @@
-import { $Enums } from '@prisma/client'
+// TODO: tRPC
+enum ExhibitionStatus {
+  UPCOMING = 'UPCOMING',
+  ONGOING = 'ONGOING',
+  ENDED = 'ENDED',
+}
 
 export const MAP_CONSTANTS = {
   ZOOM: {
@@ -28,7 +33,7 @@ type ExhibitionType = {
   thumbnail: string | null
   gpsX: string
   gpsY: string
-  status: $Enums.ExhibitionStatus
+  status: ExhibitionStatus
 }
 
 export type MapElements = {
