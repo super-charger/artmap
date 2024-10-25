@@ -5,3 +5,4 @@
 body {
   overflow-y: scroll; /* 수직 스크롤바가 항상 나타나도록 설정 */
 }
+@import './scroll.css';
