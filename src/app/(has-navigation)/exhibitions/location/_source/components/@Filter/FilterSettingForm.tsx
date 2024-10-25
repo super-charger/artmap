@@ -47,70 +47,70 @@ export default function FilterSettingForm({ actions }: FilterSettingFormProps) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
-        <div className="space-y-4">
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between border-b p-4">
-                <div>
-                  <FormLabel className="form-label">전시중</FormLabel>
-                </div>
-                <FormControl>
-                  <Switch
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="type"
-            render={({ field }) => (
-              <FormItem className="space-y-4 border-b px-[16px] pb-4">
-                <FormLabel className="form-label">전시리스트</FormLabel>
-                <FormControl>
-                  <RadioGroup
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                    className="item-center flex flex-col gap-4"
-                  >
-                    {Object.entries(ExhibitionListType).map(
-                      ([key, { value, label }]) => (
-                        <FormItem
-                          key={key}
-                          className="flex h-[28px] items-center justify-between space-y-0"
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="relative w-full max-w-screen-sm"
+      >
+        <FormField
+          control={form.control}
+          name="status"
+          render={({ field }) => (
+            <FormItem className="flex flex-row items-center justify-between border-b px-4 py-5">
+              <FormLabel className="form-label">전시중</FormLabel>
+              <FormControl>
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem className="space-y-4 px-4 py-5">
+              <FormLabel className="form-label">전시리스트</FormLabel>
+              <FormControl>
+                <RadioGroup
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  className="item-center flex flex-col gap-4"
+                >
+                  {Object.entries(ExhibitionListType).map(
+                    ([key, { value, label }]) => (
+                      <FormItem
+                        key={key}
+                        className="flex h-[28px] items-center justify-between space-y-0"
+                      >
+                        <FormLabel
+                          className={cn('text-grayscale_gray5 sm:mobile-text', {
+                            'text-primary': field.value === value,
+                          })}
                         >
-                          <FormLabel
-                            className={cn(
-                              'text-grayscale_gray5 sm:mobile-text',
-                              {
-                                'text-primary': field.value === value,
-                              },
-                            )}
-                          >
-                            {label}
-                          </FormLabel>
-                          <FormControl>
-                            <RadioGroupItem
-                              value={value}
-                              className="custom-radio"
-                            />
-                          </FormControl>
-                        </FormItem>
-                      ),
-                    )}
-                  </RadioGroup>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+                          {label}
+                        </FormLabel>
+                        <FormControl>
+                          <RadioGroupItem
+                            value={value}
+                            className="custom-radio"
+                          />
+                        </FormControl>
+                      </FormItem>
+                    ),
+                  )}
+                </RadioGroup>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <div className="h-[70px]"></div>
+        <div className="fixed bottom-0 flex h-[70px] w-full max-w-screen-sm items-center px-4 pb-2">
+          {actions}
         </div>
-        <div className="px-4 pb-2">{actions}</div>
       </form>
     </Form>
   )
