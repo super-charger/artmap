@@ -4,12 +4,12 @@ import { Metadata, Viewport } from 'next'
 
 // import { GoogleAnalytics } from "@next/third-parties/googl";
 import KakaoMapScript from '@/components/KakaoDevelopers/KakaoMapScript'
+import { MSWComponent } from '@/components/Nextauth/MSWComponent'
 import { ENV } from '@/configs/env'
 import AppProvider from '@/providers/AppProvider'
 import fonts from '@/theme/fonts'
 
 import '../css/index.css'
-import {MSWComponent} from "@/components/Nextauth/MSWComponent";
 
 /**
  *
@@ -99,12 +99,12 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <head>
+      <head suppressHydrationWarning>
         <KakaoMapScript />
         {/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}
       </head>
       <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
-      {/*<MSWComponent/>*/}
+        {/*<MSWComponent/>*/}
         <AppProvider>{children}</AppProvider>
       </body>
     </html>
