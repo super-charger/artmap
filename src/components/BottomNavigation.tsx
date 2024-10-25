@@ -26,7 +26,7 @@ export default function BottomNavigation() {
   const { navItems } = useActiveNavItems(navs)
 
   return (
-    <nav className="relative">
+    <nav className="pointer-events-auto relative">
       <div
         className={cn(
           'fixed bottom-0 left-0 right-0 z-50',
