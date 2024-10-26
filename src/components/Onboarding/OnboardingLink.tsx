@@ -2,7 +2,7 @@ import Link from 'next/link'
 import {UrlObject} from "url";
 
 type onboardingLinkProps = {
-  bgColor: string
+  bgColor: 'gray' | 'black' | 'purple' | 'white'
   children: React.ReactNode
   href: UrlObject
 }
