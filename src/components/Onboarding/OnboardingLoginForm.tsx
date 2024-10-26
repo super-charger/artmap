@@ -1,5 +1,7 @@
 'use client';
 import Image from "next/image";
+import Link from "next/link";
+import OnboardingButton from "@/components/Onboarding/OnboardingButton";
 
 export default function OnboardingLoginForm() {
     return (
@@ -33,11 +35,19 @@ export default function OnboardingLoginForm() {
                     <div
                         className="text-center text-[#808080] text-base font-normal font-['Noto Sans KR'] leading-7">자동로그인
                     </div>
-                    <div
+                    <Link href="/find-password"
                         className="ml-auto text-right text-[#808080] text-base font-normal font-['Noto Sans KR'] underline leading-7">비밀번호
                         찾기
-                    </div>
+                    </Link>
                 </div>
+                <div className="flex flex-col justify-end items-center h-full">
+                    <OnboardingButton bgColor={'black'} className="">로그인</OnboardingButton>
+                    <Link
+                        href={"/email-signup"}
+                        className="text-center text-[#808080] text-base font-normal font-['Noto Sans KR'] underline leading-7 justify-center items-center mb-10 mt-5">회원가입
+                    </Link>
+                </div>
+
             </form>
         </>
     );

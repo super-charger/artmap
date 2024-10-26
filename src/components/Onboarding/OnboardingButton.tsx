@@ -31,7 +31,7 @@ export default function OnboardingButton({
     return (
         // TODO: @dave17code 타입 수정 부탁드려용. 일단 커밋
         <button
-            className={twMerge(`${className} ${bgClass} relative z-20 inline-flex h-[50px] w-11/12 items-center justify-center rounded-[5px] px-[15px] hover:opacity-75`)}
+            className={twMerge(`relative z-20 inline-flex h-[50px] w-11/12 items-center justify-center rounded-[5px] px-[15px] hover:opacity-75 ${className} ${bgClass} `)}
             {...rest}
         >
             <div
