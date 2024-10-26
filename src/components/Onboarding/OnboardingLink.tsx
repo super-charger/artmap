@@ -1,9 +1,10 @@
 import Link from 'next/link'
+import {UrlObject} from "url";
 
 type onboardingLinkProps = {
   bgColor: string
   children: React.ReactNode
-  href: string
+  href: UrlObject
 }
 export default function OnboardingLink({
   bgColor,
@@ -26,7 +27,7 @@ export default function OnboardingLink({
   return (
     // TODO: @dave17code 타입 수정 부탁드려용. 일단 커밋
     <Link
-      href={href as any}
+      href={href}
       className={`${bgClass} relative z-20 inline-flex h-[50px] w-11/12 items-center justify-center rounded-[5px] px-[15px] hover:opacity-75`}
     >
       <div
