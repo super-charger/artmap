@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-type onboardingHeaderProps = {
+type OnboardingHeaderProps = {
     backButton?: boolean;
 }
-export default function OnboardingHeader({backButton = false}: onboardingHeaderProps) {
+export default function OnboardingHeader({backButton = false}: OnboardingHeaderProps) {
     if(backButton){
         return(
         <header className="w-full h-[60px]">

@@ -1,15 +1,12 @@
 import OnboardingImage from "@/components/Onboarding/OnboardingImage";
-import Link from "next/link";
-import Image from "next/image";
-import OnboardingLayout from "@/components/Onboarding/OnboardingLayout";
 import OnboardingHeader from "@/components/Onboarding/OnboardingHeader";
-import ExtraLargeButton from "@/components/Buttons/ExtraLargeButton";
 import OnboardingLink from "@/components/Onboarding/OnboardingLink";
 
 export default function Page() {
     return (
         <>
-            <OnboardingImage />
+            {/*이미지가 보이기 전에 온보딩 페이지가 깜빡거리는 현상 있음*/}
+            {/*<OnboardingImage />*/}
             <OnboardingHeader />
             <div className="relative w-full h-screen">
                 {/* 배경 이미지와 그라데이션 결합 */}
