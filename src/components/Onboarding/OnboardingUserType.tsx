@@ -48,7 +48,7 @@ export default function OnboardingUserType() {
                     </div>
                 </button>
             </div>
-            <div className='w-full justify-center flex absolute bottom-1'>
+            <div className='w-full justify-center flex absolute bottom-4'>
                 <button
                     className={`w-[calc(100%-32px)] h-[50px] rounded-[5px] justify-center items-center inline-flex ${selectedMemberType ? 'bg-[#1a1a1a]' : 'bg-[#bebebe]'}`}
                     disabled={!selectedMemberType}
