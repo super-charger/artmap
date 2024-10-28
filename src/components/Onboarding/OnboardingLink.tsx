@@ -4,7 +4,7 @@ import {UrlObject} from "url";
 type onboardingLinkProps = {
   bgColor: 'gray' | 'black' | 'purple' | 'white'
   children: React.ReactNode
-  href: UrlObject
+  href: string | UrlObject
 }
 export default function OnboardingLink({
   bgColor,

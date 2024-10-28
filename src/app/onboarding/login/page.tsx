@@ -11,7 +11,7 @@ import NextApple from "@/components/Nextauth/NextApple";
 export default async function Page() {
     const session = await auth()
     if (session?.user) {
-        redirect('/signup')
+        redirect('/onboarding/user-type')
     }
     return (
         <>

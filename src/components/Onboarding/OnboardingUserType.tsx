@@ -13,7 +13,7 @@ export default function OnboardingUserType() {
 
     const handleNextClick = () => {
         if (selectedMemberType) {
-            const route = selectedMemberType === 'general' ? '/general' : selectedMemberType === 'artist' ? '/artist' : '/gallery';
+            const route = selectedMemberType === 'general' ? '/onboarding/general' : selectedMemberType === 'artist' ? '/onboarding/artist' : '/onboarding/gallery';
             router.push(route);
         }
     };
