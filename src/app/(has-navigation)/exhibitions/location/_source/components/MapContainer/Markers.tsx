@@ -56,7 +56,7 @@ export default function Markers() {
    *      markers.get('marker-1') 즉시 접근 가능
    *      마커 존재 여부 빠르게 확인: markers.has(id)
    *      특정 마커만 쉽게 제거: markers.delete(id)
-   *      예) markersRef.current.get('exhibition-123') ✅
+   *      예) markersRef.current.get('gallery-123') ✅
    *
    * 4. 마커 이미지 캐싱
    *    const markerImageRef = useRef<kakao.maps.MarkerImage>()
@@ -72,12 +72,12 @@ export default function Markers() {
    *
    * 5. 실제 사용 예시
    *    // 마커 추가
-   *    markersRef.current.set('exhibition-123', new kakao.maps.Marker(...))
+   *    markersRef.current.set('gallery-123', new kakao.maps.Marker(...))
    *
    *    // 마커 제거
-   *    const marker = markersRef.current.get('exhibition-123')
+   *    const marker = markersRef.current.get('gallery-123')
    *    marker.setMap(null)
-   *    markersRef.current.delete('exhibition-123')
+   *    markersRef.current.delete('gallery-123')
    *
    *    // 마커 전체 정리
    *    markersRef.current.forEach(marker => marker.setMap(null))

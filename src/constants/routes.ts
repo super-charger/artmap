@@ -15,7 +15,7 @@ export const PAGE_ROUTES = {
   HOME: '/home',
   LOGIN: '/login',
   NOW: '/home/now',
-  EXHIBITION: '/home/exhibition',
+  EXHIBITION: '/home/gallery',
   ARTWORKS: '/artworks',
   ARTWORKS_DETAIL: '/artworks/:id',
   EXHIBITIONS_LOCATION: '/exhibitions/location',
@@ -74,7 +74,7 @@ export const headers = [
     pathname: PAGE_ROUTES.NOW,
   },
   {
-    label: 'exhibition',
+    label: 'gallery',
     pathname: PAGE_ROUTES.EXHIBITION,
   },
 ]

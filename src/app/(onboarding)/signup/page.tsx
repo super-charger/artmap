@@ -13,7 +13,7 @@ export default function Page() {
 
     const handleNextClick = () => {
         if (selectedMemberType) {
-            const route:any  = selectedMemberType === 'general' ? '/general' : selectedMemberType === 'artist' ? '/artist' : '/exhibition';
+            const route:any  = selectedMemberType === 'general' ? '/general' : selectedMemberType === 'artist' ? '/artist' : '/gallery';
             router.push(route);
         }
     };
@@ -46,8 +46,8 @@ export default function Page() {
                 <div className="text-[#808080] text-xs font-normal font-['Noto Sans KR'] leading-[18px]">작품 및 전시 포트폴리오를 등록하세요.</div>
             </button>
             <button
-                className={`w-[343px] h-[93px] left-[16px] top-[459px] absolute rounded-[10px] shadow ${selectedMemberType === 'exhibition' ? 'border-2 border-[#7f20f7]' : 'bg-white'}`}
-                onClick={() => handleMemberTypeClick('exhibition')}>
+                className={`w-[343px] h-[93px] left-[16px] top-[459px] absolute rounded-[10px] shadow ${selectedMemberType === 'gallery' ? 'border-2 border-[#7f20f7]' : 'bg-white'}`}
+                onClick={() => handleMemberTypeClick('gallery')}>
                 <p className="text-[#1a1a1a] text-base font-bold font-['Noto Sans KR'] leading-7">전시관 회원</p>
                 <div className="text-[#808080] text-xs font-normal font-['Noto Sans KR'] leading-[18px]">전시회를 등록하고 전시관을 홍보하세요.</div>
             </button>
