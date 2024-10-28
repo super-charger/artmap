@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from 'next/navigation';
 import Image from "next/image";
 
-export default function Page() {
+export default function Temp() {
     const [nickname, setNickname] = useState<string>("");
     const router = useRouter();
 
