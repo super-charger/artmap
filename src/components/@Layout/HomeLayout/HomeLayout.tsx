@@ -1,3 +1,4 @@
+// HomeLayout.tsx
 'use client'
 
 import { ReactNode, useCallback, useEffect, useState } from 'react'
@@ -8,22 +9,30 @@ import { cn } from '@/utils/utils'
 import HomeFooter from './components/HomeFooter'
 import HomeHeader from './components/HomeHeader'
 
+// HomeLayout.tsx
+
+// HomeLayout.tsx
+
+// HomeLayout.tsx
+
 interface HomeLayoutProps {
   header?: ReactNode | ((props: { isScroll: boolean }) => ReactNode)
   footer?: ReactNode
   content?: ReactNode
+  fixedScroll?: boolean // New prop to enforce scroll style statically
 }
 
 const HomeLayout = ({
   header = ({ isScroll }) => <HomeHeader isScroll={isScroll} />,
   footer = <HomeFooter />,
   content,
+  fixedScroll = false, // Default behavior is to not fix the scroll style
 }: HomeLayoutProps) => {
-  const [isScroll, setIsScroll] = useState(false)
+  const [isScroll, setIsScroll] = useState(fixedScroll)
 
   const handleScroll = useCallback(() => {
-    setIsScroll(window.scrollY > 60)
-  }, [])
+    if (!fixedScroll) setIsScroll(window.scrollY > 60)
+  }, [fixedScroll])
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
@@ -50,7 +59,7 @@ const HomeLayout = ({
       >
         {typeof header === 'function' ? header({ isScroll }) : header}
       </header>
-      <main className={'w-full min-w-full'}>{content}</main>
+      <main className="w-full min-w-full">{content}</main>
       <footer className="w-full py-[10px]">{footer}</footer>
     </div>
   )
