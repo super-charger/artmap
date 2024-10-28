@@ -23,6 +23,7 @@ export default function GeneralProfile() {
                             <Image src={"/icons/profile/profile-m.svg"} alt={"profile-m"} width={70} height={70}/>
                         </div>
                     </div>
+                    {/* 가운데 정렬을 하는 것은 어떨지 고민 */}
                     <div className="flex-col flex items-start gap-2.5 m-[16px] mt-12">
                         <div className="text-black text-xs font-bold font-['Noto Sans KR'] leading-[18px]">닉네임</div>
                         <div className="flex-grow h-10 flex items-center border-b-4">
@@ -39,6 +40,7 @@ export default function GeneralProfile() {
             </div>
 
 
+            {/* 하단 버튼 컴포넌트 분리 고려 중 */}
             <div className='w-full justify-center flex absolute bottom-4'>
                 <button
                     className={`w-[calc(100%-32px)] h-[50px] rounded-[5px] justify-center items-center inline-flex ${nickname ? 'bg-[#1a1a1a]' : 'bg-[#bebebe]'}`}
