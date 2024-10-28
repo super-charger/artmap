@@ -14,6 +14,7 @@ export async function getOngoingExhibitions() {
         id: 'asc',
       },
     })
+    console.log(popularExhibitions)
     return { data: popularExhibitions }
   } catch (error) {
     console.error('Error fetching current exhibitions:', error)
@@ -35,6 +36,7 @@ export async function getUpcomingExhibitions() {
         id: 'desc',
       },
     })
+    console.log(upcomingExhibitions)
     return { data: upcomingExhibitions }
   } catch (error) {
     console.error('Error fetching current exhibitions:', error)
