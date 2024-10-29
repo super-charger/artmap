@@ -74,7 +74,7 @@ export const headers = [
     pathname: PAGE_ROUTES.NOW,
   },
   {
-    label: 'exhibitions',
+    label: 'exhibition',
     pathname: PAGE_ROUTES.EXHIBITION,
   },
 ]
