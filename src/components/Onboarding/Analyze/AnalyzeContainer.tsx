@@ -3,6 +3,6 @@ type AnalyzeContainerProps = {
 }
 export default function AnalyzeContainer({children}: AnalyzeContainerProps) {
     return (
-        <div className="w-full h-[75%] relative mt-3 px-2">{children}</div>
+        <div className="flex items-center justify-center w-full h-[75%] mt-3 px-[15px]">{children}</div>
     )
 }
