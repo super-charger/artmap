@@ -1,4 +1,3 @@
-// pages/ExhibitionPage.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -7,13 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { getAllExhibitions } from '@/actions/getExhibitions'
-import { LAYOUT } from '@/constants/layout'
 import { PAGE_ROUTES } from '@/constants/routes'
-import { cn } from '@/utils/utils'
-
-// pages/ExhibitionPage.tsx
-
-// pages/ExhibitionPage.tsx
 
 export default function ExhibitionPage() {
   const [exhibitions, setExhibitions] = useState<any[]>([])
@@ -22,7 +15,7 @@ export default function ExhibitionPage() {
     async function fetchData() {
       try {
         const result = await getAllExhibitions()
-        setExhibitions(result.data.flat() as any[])
+        setExhibitions(result.data.flat() as any[]) // 데이터를 플랫하게 해서 하나의 배열로 만듦
       } catch (error) {
         console.error('Error fetching exhibitions:', error)
       }
@@ -32,40 +25,78 @@ export default function ExhibitionPage() {
 
   return (
     <>
-      {/* 독립된 고정 헤더, NowPage와 완전히 동일한 스타일 적용 */}
-      <header
-        className={cn(
-          `h-[${LAYOUT.HEADER.HEIGHT}]`,
-          'fixed top-0 z-50 flex w-full max-w-screen-sm items-center justify-center',
-          'transition-colors duration-300 ease-in-out',
-          'bg-grayscale_white', // 고정된 배경색을 흰색으로 설정
-        )}
-      >
-        <nav className="flex w-full items-center p-[12px]">
-          <ul className="flex gap-5">
-            <li
-              className={cn(
-                'mobile-extra-large font-bold uppercase text-gray-400 opacity-50',
-                'text-center',
-              )}
-            >
-              <Link href={PAGE_ROUTES.NOW}>Now</Link>
+      {/* 고정 헤더 */}
+      <header className="fixed top-0 z-50 flex h-[60px] w-full max-w-screen-sm items-center justify-between border-b border-grayscale_gray2 bg-grayscale_white px-[12px]">
+        <nav className="flex w-full items-center">
+          <ul className="flex flex-1 gap-5">
+            <li>
+              <Link href={PAGE_ROUTES.NOW}>
+                <span className="mobile-extra-large font-bold uppercase text-grayscale_gray3 opacity-50 transition-colors">
+                  Now
+                </span>
+              </Link>
             </li>
-            <li
-              className={cn(
-                'mobile-extra-large font-bold uppercase text-black',
-                'text-center',
-              )}
-            >
-              <Link href={PAGE_ROUTES.EXHIBITION}>Exhibition</Link>
+            <li>
+              <Link href={PAGE_ROUTES.EXHIBITION}>
+                <span className="mobile-extra-large font-bold uppercase text-black transition-colors">
+                  Exhibition
+                </span>
+              </Link>
             </li>
           </ul>
+
+          {/* 돋보기 버튼 */}
+          <button className="ml-auto">
+            <Image
+              src="/icons/system/search-black.svg"
+              alt="Search Icon"
+              width={24}
+              height={24}
+            />
+          </button>
         </nav>
       </header>
 
+      {/* 옵션 패널 */}
+      <div className="fixed left-0 right-0 top-[60px] z-40 m-auto flex h-[68.5px] w-full max-w-screen-sm items-center justify-between border-b border-grayscale_gray2 bg-white px-[12px]">
+        {/* 최신순 텍스트 */}
+        <div className="mobile-title flex items-center">
+          최신순
+          <Image
+            src="/icons/vertical-arrow/open-s.svg"
+            alt="Arrow Icon"
+            width={16}
+            height={16}
+            className="ml-1"
+          />
+        </div>
+
+        {/* 오른쪽 버튼들 */}
+        <div className="flex items-center gap-2">
+          {/* 셔플 버튼 */}
+          <button>
+            <Image
+              src="/icons/system/shuffle-black.svg"
+              alt="Shuffle Icon"
+              width={24}
+              height={24}
+            />
+          </button>
+
+          {/* 필터 버튼 */}
+          <button className="ml-2">
+            <Image
+              src="/icons/system/filter-black.svg"
+              alt="Filter Icon"
+              width={24}
+              height={24}
+            />
+          </button>
+        </div>
+      </div>
+
       {/* 전시 콘텐츠 */}
-      <main className="min-h-[1000px] bg-slate-500 pt-[80px]">
-        <div className="mb-8 h-px bg-slate-500"></div>
+      <main className="min-h-screen bg-slate-500 pt-[128.5px]">
         <div className="grid grid-cols-2 gap-4 px-4 pb-5">
           {exhibitions.length === 0 ?
             <div className="text-gray-500">
