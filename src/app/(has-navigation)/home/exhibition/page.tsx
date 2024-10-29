@@ -11,9 +11,14 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import { getAllExhibitions } from '@/actions/getExhibitions'
 import { PAGE_ROUTES } from '@/constants/routes'
 
+import FilterModal from './FilterModal'
+
 export default function ExhibitionPage() {
   const [exhibitions, setExhibitions] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+  const [isOn, setIsOn] = useState(true)
+  const [selectedRegion, setSelectedRegion] = useState<string>('전체')
 
   useEffect(() => {
     async function fetchData() {
@@ -28,6 +33,14 @@ export default function ExhibitionPage() {
     }
     fetchData()
   }, [])
+
+  const toggleFilterModal = () => {
+    setIsFilterModalOpen(!isFilterModalOpen)
+  }
+
+  const toggleSwitch = () => {
+    setIsOn(!isOn)
+  }
 
   return (
     <>
@@ -79,6 +92,7 @@ export default function ExhibitionPage() {
 
         {/* 오른쪽 버튼들 */}
         <div className="flex items-center gap-2">
+          {/* 셔플 버튼 */}
           <button>
             <Image
               src="/icons/system/shuffle-black.svg"
@@ -87,7 +101,9 @@ export default function ExhibitionPage() {
               height={24}
             />
           </button>
-          <button className="ml-2">
+
+          {/* 필터 버튼 */}
+          <button className="ml-2" onClick={toggleFilterModal}>
             <Image
               src="/icons/system/filter-black.svg"
               alt="Filter Icon"
@@ -168,6 +184,17 @@ export default function ExhibitionPage() {
           }
         </div>
       </main>
+
+      {/* 필터 모달 */}
+      {isFilterModalOpen && (
+        <FilterModal
+          isOn={isOn}
+          toggleSwitch={toggleSwitch}
+          closeModal={toggleFilterModal}
+          selectedRegion={selectedRegion}
+          setSelectedRegion={setSelectedRegion}
+        />
+      )}
     </>
   )
 }
