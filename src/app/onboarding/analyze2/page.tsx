@@ -8,7 +8,7 @@ export default function Page() {
         <>
             <OnboardingHeader backButton={true}/>
             <OnboardingTitle>마음에 드는 작품을<br/>골라주세요.</OnboardingTitle>
-            <AnalyzeContainer/>
+            <AnalyzeContainer>a</AnalyzeContainer>
             <AnalyzeFooter/>
 
         </>
