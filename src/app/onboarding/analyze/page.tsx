@@ -1,10 +1,16 @@
+'use client'
 import OnboardingHeader from "@/components/Onboarding/OnboardingHeader";
 import Link from "next/link";
 import Image from "next/image";
 import OnboardingLink from "@/components/Onboarding/OnboardingLink";
-import AnalyzeFooter from "@/components/Onboarding/AnalyzeFooter";
+import AnalyzeFooter from "@/components/Onboarding/Analyze/AnalyzeFooter";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
+    const router = useRouter();
+    const buttonClick = () => {
+        router.push('/onboarding/analyze2')
+    }
     return (
         <>
             <OnboardingHeader/>
@@ -20,7 +26,7 @@ export default function Page() {
                 <Image className="relative"
                        src="/images/analyze.png" width={343} height={320} alt={"analyze"}/>
             </div>
-            <AnalyzeFooter/>
+            <AnalyzeFooter  onClick={buttonClick} buttonText={'취향분석 시작'} nextButton={'다음에 할래요'}/>
         </>
     )
 }

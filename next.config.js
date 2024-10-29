@@ -124,6 +124,9 @@ module.exports = withBundleAnalyzer({
       {
         hostname: 'www.culture.go.kr',
       },
+      {
+        hostname: 'loremflickr.com',
+      }
     ],
   },
 })
