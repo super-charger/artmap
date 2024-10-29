@@ -2,7 +2,7 @@ import OnboardingHeader from "@/components/Onboarding/OnboardingHeader";
 import Link from "next/link";
 import Image from "next/image";
 import OnboardingLink from "@/components/Onboarding/OnboardingLink";
-import AnalyzeFooter from "@/components/Onboarding/AnalyzeFooter";
+import AnalyzeFooter from "@/components/Onboarding/Analyze/AnalyzeFooter";
 
 export default function Page() {
     return (

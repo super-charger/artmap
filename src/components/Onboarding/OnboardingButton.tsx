@@ -5,13 +5,15 @@ import {twMerge} from "tailwind-merge";
 type OnboardingButtonProps = {
     bgColor: 'gray' | 'black' | 'purple' | 'white'
     children: React.ReactNode
-    rest?: React.ComponentPropsWithRef<'button'>
     className?: string;
+    onClick?: () => void;
+    rest?: React.ComponentPropsWithRef<'button'>
 }
 export default function OnboardingButton({
                                            bgColor,
                                            children,
                                              className = '',
+    onClick,
                                              ...rest
 
                                        }: OnboardingButtonProps) {
@@ -31,6 +33,7 @@ export default function OnboardingButton({
     return (
         // TODO: @dave17code 타입 수정 부탁드려용. 일단 커밋
         <button
+            onClick={onClick}
             className={twMerge(`relative z-20 inline-flex h-[50px] w-11/12 items-center justify-center rounded-[5px] px-[15px] hover:opacity-75 ${className} ${bgClass} `)}
             {...rest}
         >
