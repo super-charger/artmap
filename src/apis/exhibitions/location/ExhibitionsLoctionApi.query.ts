@@ -1,34 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
 
-import {
-  getExhibitionsArea,
-  getGroupedByArea,
-} from '@/app/(has-navigation)/exhibitions/location/_source/actions'
+import { getExhibitionsWithArea } from '@/app/(has-navigation)/exhibitions/location/_source/actions/getExhibitionsWithArea'
 import { UseQueryParams } from '@/types/module/react-query/use-query-params'
 
 export const EXHIBITIONS_API_QUERY_KEY = {
-  GET_GROUP_BY_AREA: () => ['exhibitions-group-by-area'],
-  GET_EXHIBITIONS_AREA: () => ['exhibitions-area'],
+  GET_EXHIBITIONS_WITH_AREA: () => ['exhibitions-with-area'],
 }
 
-export function useGetGroupByAreaQuery(
-  params?: UseQueryParams<typeof getGroupedByArea>,
+export function useGetExhibitionsWithAreaQuery(
+  params?: UseQueryParams<typeof getExhibitionsWithArea>,
 ) {
-  const queryKey = EXHIBITIONS_API_QUERY_KEY.GET_GROUP_BY_AREA()
+  const queryKey = EXHIBITIONS_API_QUERY_KEY.GET_EXHIBITIONS_WITH_AREA()
   return useQuery({
     queryKey,
-    queryFn: () => getGroupedByArea(),
-    ...params?.options,
-  })
-}
-
-export function useGetExhibitionsAreaQuery(
-  params?: UseQueryParams<typeof getExhibitionsArea>,
-) {
-  const queryKey = EXHIBITIONS_API_QUERY_KEY.GET_EXHIBITIONS_AREA()
-  return useQuery({
-    queryKey,
-    queryFn: () => getExhibitionsArea(),
+    queryFn: () => getExhibitionsWithArea(),
     ...params?.options,
   })
 }
