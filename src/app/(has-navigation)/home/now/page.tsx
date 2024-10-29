@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react'
 
 import Image from 'next/image'
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 import 'swiper/css'
 import 'swiper/css/navigation'
 import { Swiper, SwiperSlide } from 'swiper/react'
@@ -27,6 +29,7 @@ interface Slide {
 export default function NowPage() {
   const [currentSlide, setCurrentSlide] = useState<number>(0)
   const [exhibitionsData, setExhibitionsData] = useState<unknown[][]>([])
+  const [loading, setLoading] = useState(true)
 
   const slides: Slide[] = [
     {
@@ -49,15 +52,13 @@ export default function NowPage() {
     async function fetchData() {
       try {
         const ongoingResponse = await getOngoingExhibitions()
-        const ongoingExhibitions = ongoingResponse.data
-
         const upcomingResponse = await getUpcomingExhibitions()
-        const upcomingExhibitions = upcomingResponse.data
 
-        // 두 개의 전시 데이터를 각각 배열에 넣음
-        setExhibitionsData([ongoingExhibitions, upcomingExhibitions])
+        setExhibitionsData([ongoingResponse.data, upcomingResponse.data])
+        setLoading(false)
       } catch (error) {
         console.error('Error fetching exhibitions:', error)
+        setLoading(false)
       }
     }
     fetchData()
@@ -114,17 +115,30 @@ export default function NowPage() {
         </div>
 
         {/* 진행 중인 전시 Carousel */}
-        {exhibitionsData[0] && (
-          <ExhibitionCarousel exhibitions={exhibitionsData[0]}>
-            진행 중인 전시
-          </ExhibitionCarousel>
-        )}
-        {/* 다가오는 전시 Carousel */}
-        {exhibitionsData[1] && (
-          <ExhibitionCarousel exhibitions={exhibitionsData[1]}>
-            다가오는 전시
-          </ExhibitionCarousel>
-        )}
+        {loading ?
+          <div className="grid grid-cols-2 gap-4 px-4 pb-5">
+            {Array(4)
+              .fill(0)
+              .map((_, index) => (
+                <div key={index} className="rounded bg-white p-3 shadow-md">
+                  <Skeleton height={200} />
+                  <Skeleton count={3} className="mt-2" />
+                </div>
+              ))}
+          </div>
+        : <>
+            {exhibitionsData[0] && (
+              <ExhibitionCarousel exhibitions={exhibitionsData[0]}>
+                진행 중인 전시
+              </ExhibitionCarousel>
+            )}
+            {exhibitionsData[1] && (
+              <ExhibitionCarousel exhibitions={exhibitionsData[1]}>
+                다가오는 전시
+              </ExhibitionCarousel>
+            )}
+          </>
+        }
       </div>
     </div>
   )
