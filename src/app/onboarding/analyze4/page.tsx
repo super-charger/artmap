@@ -9,7 +9,7 @@ import {useRouter} from "next/navigation";
 export default function Page() {
     const router = useRouter();
     const buttonClick = () => {
-        router.push('/onboarding/analyze3')
+        router.push('/home/now')
     }
     return (
         <>

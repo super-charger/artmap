@@ -1,10 +1,16 @@
+'use client'
 import OnboardingHeader from "@/components/Onboarding/OnboardingHeader";
 import AnalyzeFooter from "@/components/Onboarding/Analyze/AnalyzeFooter";
 import OnboardingTitle from "@/components/Onboarding/OnboardingTitle";
 import AnalyzeContainer from "@/components/Onboarding/Analyze/AnalyzeContainer";
 import AnalyzeImageContainer from "@/components/Onboarding/Analyze/AnalyzeImageContainer";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
+    const router = useRouter();
+    const buttonClick = () => {
+        router.push('/onboarding/analyze3')
+    }
     return (
         <>
             <OnboardingHeader backButton={true}/>
@@ -12,7 +18,7 @@ export default function Page() {
             <AnalyzeContainer>
                 <AnalyzeImageContainer/>
             </AnalyzeContainer>
-            <AnalyzeFooter buttonText={'다음'} nextButton={'취향분석 다음에 하기'}/>
+            <AnalyzeFooter buttonText={'다음'} nextButton={'취향분석 다음에 하기'} onClick={buttonClick}/>
 
 
         </>
