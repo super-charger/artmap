@@ -1,14 +1,29 @@
 'use server'
 
+import { ExhibitionStatus } from '@prisma/client'
+
 import { OverlayApiType } from '@/apis/exhibitions/types/model/map'
 import prisma from '@/apis/prismaClient'
 
 import { areaCenterPosition, defaultPosition } from '../constants/map'
 
-export async function getExhibitionsWithArea() {
+interface GetExhibitionsParams {
+  area?: string
+  status?: ExhibitionStatus
+}
+
+export async function getExhibitionsWithArea({
+  area,
+  status,
+}: GetExhibitionsParams = {}) {
   try {
-    // 모든 전시 데이터 가져오기
+    const where = {
+      ...(area && { area }),
+      ...(status && { status }),
+    }
+
     const exhibitions = await prisma.exhibition.findMany({
+      where,
       select: {
         id: true,
         title: true,
