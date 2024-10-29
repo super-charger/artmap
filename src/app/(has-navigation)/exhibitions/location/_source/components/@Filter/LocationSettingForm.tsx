@@ -8,6 +8,8 @@ import '@radix-ui/react-dialog'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import { useGetExhibitionsWithAreaQuery } from '@/apis/exhibitions/location/ExhibitionsLoctionApi.query'
+import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 import {
   Dialog,
   DialogContent,
@@ -27,6 +29,29 @@ import {
   SystemXiconSGray4Icon,
   VerticalArrowOpenLIcon,
 } from '@/generated/icons/MyIcons'
+
+const areaCenterPosition: Record<
+  string,
+  { latitude: number; longitude: number }
+> = {
+  서울특별시: { latitude: 37.5665, longitude: 126.978 },
+  강원도: { latitude: 37.8228, longitude: 128.1555 },
+  경기도: { latitude: 37.2636, longitude: 127.0286 },
+  경상남도: { latitude: 35.4606, longitude: 128.2132 },
+  경상북도: { latitude: 36.576, longitude: 128.505 },
+  광주광역시: { latitude: 35.1595, longitude: 126.8526 },
+  대구광역시: { latitude: 35.8714, longitude: 128.6014 },
+  대전광역시: { latitude: 36.3504, longitude: 127.3845 },
+  부산광역시: { latitude: 35.1796, longitude: 129.0756 },
+  세종특별자치시: { latitude: 36.48, longitude: 127.289 },
+  울산광역시: { latitude: 35.5384, longitude: 129.3114 },
+  인천광역시: { latitude: 37.4563, longitude: 126.7052 },
+  전라남도: { latitude: 34.8679, longitude: 126.991 },
+  전라북도: { latitude: 35.7175, longitude: 127.153 },
+  제주특별자치도: { latitude: 33.489, longitude: 126.4983 },
+  충청남도: { latitude: 36.6588, longitude: 126.6728 },
+  충청북도: { latitude: 36.6357, longitude: 127.4914 },
+} as const
 
 // 도시 데이터
 const CITIES = [
@@ -51,7 +76,7 @@ const CITIES = [
 
 const FormSchema = z.object({
   city: z.string().min(1),
-  district: z.string().min(1),
+  // district: z.string().min(1),
 })
 
 type LocationSettingFormProps = {
@@ -63,16 +88,24 @@ export default function LocationSettingForm({
 }: LocationSettingFormProps) {
   const [isCityDialogOpen, setIsCityDialogOpen] = useState(false)
 
+  const visibleAreas = useMapStateContext((state) => state.visibleAreas)
+
+  const set = useMapStateContext((state) => state.set)
+
+  // 현재 보고 있는 위치를 저장해야함
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      city: '서울특별시',
-      district: '마포구',
+      city: visibleAreas[0],
+      // district: '마포구',
     },
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data, 'data')
+    const centerPosition = areaCenterPosition[data.city]
+    if (centerPosition) {
+      set('center', centerPosition)
+    }
   }
 
   const selectedCity = form.watch('city')
@@ -108,7 +141,7 @@ export default function LocationSettingForm({
             />
 
             {/* 구 선택 */}
-            <FormField
+            {/* <FormField
               control={form.control}
               name="district"
               render={({ field }) => (
@@ -127,7 +160,7 @@ export default function LocationSettingForm({
                   </FormControl>
                 </FormItem>
               )}
-            />
+            /> */}
 
             {/* 최근 지역 */}
             <div className="py-7">
@@ -135,10 +168,10 @@ export default function LocationSettingForm({
                 최근 지역
               </FormLabel>
               <div className="flex gap-2 pt-[10px]">
-                <span className="text-grayscale_4 mobile-text-small inline-flex items-center gap-[10px] rounded-full border border-grayscale_gray2 px-3 py-1">
+                <span className="mobile-text-small inline-flex items-center gap-[10px] rounded-full border border-grayscale_gray2 px-3 py-1 text-grayscale_gray4">
                   제주 서귀포시 <SystemXiconSGray4Icon width={10} height={10} />
                 </span>
-                <span className="text-grayscale_4 mobile-text-small inline-flex items-center gap-[10px] rounded-full border border-grayscale_gray2 px-3 py-1">
+                <span className="mobile-text-small inline-flex items-center gap-[10px] rounded-full border border-grayscale_gray2 px-3 py-1 text-grayscale_gray4">
                   서울 종로구 <SystemXiconSGray4Icon width={10} height={10} />
                 </span>
               </div>
@@ -152,7 +185,8 @@ export default function LocationSettingForm({
       <Dialog open={isCityDialogOpen} onOpenChange={setIsCityDialogOpen}>
         <DialogContent
           hideCloseButton
-          className="h-[100vh] w-full max-w-screen-sm sm:rounded-none"
+          aria-describedby="dialog-description"
+          className="h-screen w-full max-w-screen-sm sm:rounded-none"
         >
           <DialogHeader className="sr-only">
             <DialogTitle>도시 선택</DialogTitle>
