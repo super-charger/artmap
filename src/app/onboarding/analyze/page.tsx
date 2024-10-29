@@ -26,7 +26,7 @@ export default function Page() {
                 <Image className="relative"
                        src="/images/analyze.png" width={343} height={320} alt={"analyze"}/>
             </div>
-            <AnalyzeFooter  onClick={buttonClick}/>
+            <AnalyzeFooter  onClick={buttonClick} buttonText={'취향분석 시작'} nextButton={'다음에 할래요'}/>
         </>
     )
 }
