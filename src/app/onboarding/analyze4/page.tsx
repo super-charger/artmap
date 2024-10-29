@@ -7,6 +7,8 @@ import {useRouter} from "next/navigation";
 import GenreButton from "@/components/Onboarding/Analyze/GenreButton";
 import GenreContainer from "@/components/Onboarding/Analyze/GenreContainer";
 import {COLOR} from "@/constants/analyze";
+import OnboardingButton from "@/components/Onboarding/OnboardingButton";
+import Link from "next/link";
 
 export default function Page() {
 
@@ -25,7 +27,13 @@ export default function Page() {
                     </GenreButton>
                 ))}
             </GenreContainer>
-            <AnalyzeFooter buttonText={'취향분석 완료'} nextButton={'취향분석 다음에 하기'} onClick={buttonClick}/>
+            <div className="absolute inset-x-0 bottom-4 flex flex-col items-center">
+                <OnboardingButton bgColor={'purple'} onClick={buttonClick}>취향분석 완료</OnboardingButton>
+                <Link href={"/home/now"}
+                      className="mt-4 relative text-center text-[#808080] text-base font-normal font-['Noto Sans KR'] underline leading-7">
+                    취향분석 다음에 하기
+                </Link>
+            </div>
 
 
         </>
