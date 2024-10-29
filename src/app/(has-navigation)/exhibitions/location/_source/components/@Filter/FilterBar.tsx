@@ -3,6 +3,7 @@
 import { FilterSettingSheet } from '@/components/@Sheet/FilterSettingSheet'
 import { Button } from '@/components/ui/button'
 import { SheetClose } from '@/components/ui/sheet'
+import { cn } from '@/lib/utils'
 
 import FilterSettingForm from './FilterSettingForm'
 import LocationSettingForm from './LocationSettingForm'
@@ -15,18 +16,18 @@ const FilterBar = () => {
         {/* 위치 설정 */}
         <LocationSettingSeet>
           <LocationSettingForm
-            actions={
+            actions={(isUpdating) => (
               <SheetClose asChild>
                 <Button
                   variant="secondary"
                   size="md"
                   type="submit"
-                  className="mobile-button"
+                  className={cn('mobile-button', isUpdating && 'opacity-50')}
                 >
                   찾아보기
                 </Button>
               </SheetClose>
-            }
+            )}
           />
         </LocationSettingSeet>
 

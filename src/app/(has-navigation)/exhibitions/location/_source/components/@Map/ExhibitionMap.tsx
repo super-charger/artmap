@@ -2,10 +2,16 @@
 
 import { useEffect, useRef } from 'react'
 
+import { useSearchParams } from 'next/navigation'
+
 import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 import { useGlobalMapStore } from '@/stores/map/store'
 
-import { MAP_MOVE_ZOOM_MIN_LEVEL } from '../../constants/map'
+import {
+  AREA_NAME_MAP,
+  MAP_MOVE_ZOOM_MIN_LEVEL,
+  areaCenterPosition,
+} from '../../constants/map'
 import { mapEventBus } from '../../map-event-bus'
 import { MAP_OPTIONS, NAMESPACE_KEY } from '../../types/map'
 import MapInit from './MapInit'
@@ -32,7 +38,6 @@ const DEFAULT_OPTIONS = {
 export default function ExhibitionMap() {
   const isInitialMove = useRef(true)
   const map = useGlobalMapStore((state) => state.map)
-  const center = useMapStateContext((state) => state.center)
   const set = useMapStateContext((state) => state.set)
 
   useEffect(() => {
@@ -68,18 +73,27 @@ export default function ExhibitionMap() {
     }
   }, [map, set])
 
-  // 위치 설정시 지도 이동
-  useEffect(() => {
-    if (!map || !center) return
+  const searchParams = useSearchParams()
+  const currentCity = searchParams.get('city')
 
-    const moveLatLng = new kakao.maps.LatLng(center.latitude, center.longitude)
+  useEffect(() => {
+    if (!map || !currentCity) return
+
+    const areaName = AREA_NAME_MAP[currentCity]
+    const centerPosition = areaCenterPosition[areaName]
+
+    const moveLatLng = new kakao.maps.LatLng(
+      centerPosition.lat,
+      centerPosition.lng,
+    )
+
     map.panTo(moveLatLng)
 
     if (isInitialMove.current) {
       map.setLevel(MAP_MOVE_ZOOM_MIN_LEVEL)
       isInitialMove.current = false
     }
-  }, [center, map])
+  }, [currentCity, map])
 
   return (
     <>
@@ -89,15 +103,3 @@ export default function ExhibitionMap() {
     </>
   )
 }
-
-// export const calculateVisibleAreas = (bounds: kakao.maps.LatLngBounds) => {
-//   const areas: string[] = []
-//   Object.entries(areaCenterPosition).forEach(([area, position]) => {
-//     const areaPosition = new kakao.maps.LatLng(position.lat, position.lng)
-//     if (bounds.contain(areaPosition)) {
-//       areas.push(area)
-//     }
-//   })
-
-//   return areas
-// }

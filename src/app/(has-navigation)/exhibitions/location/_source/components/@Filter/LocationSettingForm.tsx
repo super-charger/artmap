@@ -2,13 +2,18 @@
 
 import { useState } from 'react'
 
+// 추가
 import { zodResolver } from '@hookform/resolvers/zod'
 import '@radix-ui/react-dialog'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
-import { useGetExhibitionsWithAreaQuery } from '@/apis/exhibitions/location/ExhibitionsLoctionApi.query'
+import {
+  EXHIBITIONS_API_QUERY_KEY,
+  useUpdateExhibitionFilterMutation,
+} from '@/apis/exhibitions/location/ExhibitionsLoctionApi.query'
 import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 import {
   Dialog,
@@ -29,6 +34,10 @@ import {
   SystemXiconSGray4Icon,
   VerticalArrowOpenLIcon,
 } from '@/generated/icons/MyIcons'
+
+import { AREA_NAME_MAP } from '../../constants/map'
+import { useVisibleElements } from '../../hooks/useVisibleElements'
+import { useLocationState } from './LocationSettingSeet'
 
 const areaCenterPosition: Record<
   string,
@@ -80,15 +89,51 @@ const FormSchema = z.object({
 })
 
 type LocationSettingFormProps = {
-  actions: React.ReactNode
+  actions: (isUpdating: boolean) => React.ReactNode
 }
 
 export default function LocationSettingForm({
   actions,
 }: LocationSettingFormProps) {
-  const [isCityDialogOpen, setIsCityDialogOpen] = useState(false)
+  const queryClient = useQueryClient()
+
+  const {
+    mutate: updateFilter,
+    isPending,
+    isSuccess,
+    isError,
+  } = useUpdateExhibitionFilterMutation({
+    options: {
+      onSuccess: (data, variables) => {
+        queryClient.setQueryData(
+          EXHIBITIONS_API_QUERY_KEY.UPDATE_EXHIBITIONS_WITH_AREA(),
+          data,
+        )
+
+        const seletedAreaName = AREA_NAME_MAP[form.getValues('city')]
+
+        const areaGroup = data.areaGroups.find(
+          (group) => group.area === seletedAreaName,
+        )
+
+        if (areaGroup) {
+          set('center', {
+            latitude: areaGroup.position.lat,
+            longitude: areaGroup.position.lng,
+          })
+        }
+      },
+      onError: (error) => {
+        console.log(error)
+      },
+    },
+  })
 
   const visibleAreas = useMapStateContext((state) => state.visibleAreas)
+
+  const [isCityDialogOpen, setIsCityDialogOpen] = useState(false)
+
+  const { currentCity, updateCity } = useLocationState()
 
   const set = useMapStateContext((state) => state.set)
 
@@ -96,16 +141,15 @@ export default function LocationSettingForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      city: visibleAreas[0],
+      city: currentCity,
       // district: '마포구',
     },
   })
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    const centerPosition = areaCenterPosition[data.city]
-    if (centerPosition) {
-      set('center', centerPosition)
-    }
+    updateCity(data.city)
+    const areaName = AREA_NAME_MAP[data.city]
+    updateFilter({ area: areaName })
   }
 
   const selectedCity = form.watch('city')
@@ -176,7 +220,7 @@ export default function LocationSettingForm({
                 </span>
               </div>
             </div>
-            {actions}
+            {actions(isPending)}
           </div>
         </form>
       </Form>
