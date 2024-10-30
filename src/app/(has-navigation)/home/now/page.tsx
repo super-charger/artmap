@@ -51,8 +51,8 @@ export default function NowPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const ongoingResponse = await getOngoingExhibitions()
-        const upcomingResponse = await getUpcomingExhibitions()
+        const ongoingResponse = await getOngoingExhibitions("서울")
+        const upcomingResponse = await getUpcomingExhibitions("서울")
 
         setExhibitionsData([ongoingResponse.data, upcomingResponse.data])
       } catch (error) {
