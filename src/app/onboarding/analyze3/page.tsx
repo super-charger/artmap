@@ -21,7 +21,7 @@ export default function Page() {
             <OnboardingTitle>내가 관심있는 미술 장르를<br/>전부 골라주세요.</OnboardingTitle>
             <GenreContainer>
                 {GENRE.map((genre,index) => (
-                    <GenreButton key={genre[index]}>
+                    <GenreButton key={genre}>
                         {genre}
                     </GenreButton>
                 ))}
