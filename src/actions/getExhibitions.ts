@@ -1,9 +1,12 @@
+// getExhibitions.ts
 'use server'
 
 import prisma from '@/apis/prismaClient'
 
+// getExhibitions.ts
+
 // 진행 중인 전시 가져오기
-export async function getOngoingExhibitions(region: string = '서울') {
+export async function getOngoingExhibitions(region: string) {
   try {
     const popularExhibitions = await prisma.exhibition.findMany({
       where: {
@@ -14,30 +17,8 @@ export async function getOngoingExhibitions(region: string = '서울') {
       orderBy: {
         id: 'asc',
       },
-      select: {
-        id: true,
-        title: true,
-        startDate: true,
-        endDate: true,
-        place: true,
-        area: true,
-        thumbnail: true,
-        status: true,
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        visits: {
-          select: {
-            id: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
-        // gpsX와 gpsY는 가져오지 않음
-      },
     })
+    console.log(popularExhibitions)
     return { data: popularExhibitions }
   } catch (error) {
     console.error('Error fetching ongoing exhibitions:', error)
@@ -59,30 +40,8 @@ export async function getUpcomingExhibitions(region: string = '서울') {
       orderBy: {
         id: 'desc',
       },
-      select: {
-        id: true,
-        title: true,
-        startDate: true,
-        endDate: true,
-        place: true,
-        area: true,
-        thumbnail: true,
-        status: true,
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        visits: {
-          select: {
-            id: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
-        // gpsX와 gpsY는 가져오지 않음
-      },
     })
+    console.log(upcomingExhibitions)
     return { data: upcomingExhibitions }
   } catch (error) {
     console.error('Error fetching upcoming exhibitions:', error)
@@ -104,29 +63,6 @@ export async function getAllExhibitions(region: string = '서울') {
       orderBy: {
         id: 'desc',
       },
-      select: {
-        id: true,
-        title: true,
-        startDate: true,
-        endDate: true,
-        place: true,
-        area: true,
-        thumbnail: true,
-        status: true,
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        visits: {
-          select: {
-            id: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
-        // gpsX와 gpsY는 가져오지 않음
-      },
     })
 
     const upcomingExhibitions = await prisma.exhibition.findMany({
@@ -137,29 +73,6 @@ export async function getAllExhibitions(region: string = '서울') {
       take: 20,
       orderBy: {
         id: 'asc',
-      },
-      select: {
-        id: true,
-        title: true,
-        startDate: true,
-        endDate: true,
-        place: true,
-        area: true,
-        thumbnail: true,
-        status: true,
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        visits: {
-          select: {
-            id: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
-        // gpsX와 gpsY는 가져오지 않음
       },
     })
 
@@ -172,29 +85,6 @@ export async function getAllExhibitions(region: string = '서울') {
       orderBy: {
         id: 'desc',
       },
-      select: {
-        id: true,
-        title: true,
-        startDate: true,
-        endDate: true,
-        place: true,
-        area: true,
-        thumbnail: true,
-        status: true,
-        likes: {
-          select: {
-            id: true,
-          },
-        },
-        visits: {
-          select: {
-            id: true,
-          },
-        },
-        createdAt: true,
-        updatedAt: true,
-        // gpsX와 gpsY는 가져오지 않음
-      },
     })
 
     const allData: any[] = []
@@ -202,6 +92,74 @@ export async function getAllExhibitions(region: string = '서울') {
     return { data: allData }
   } catch (error) {
     console.error('Error fetching all exhibitions:', error)
+    throw new Error('An error occurred while fetching exhibitions')
+  } finally {
+    await prisma.$disconnect()
+  }
+}
+
+// 모든 지역에서 다가오는 전시 가져오기
+export async function getAllUpcomingExhibitions() {
+  try {
+    const regions = [
+      '서울',
+      '경기',
+      '인천',
+      '광주',
+      '대전',
+      '세종',
+      '울산',
+      '대구',
+      '부산',
+      '강원',
+      '제주',
+    ]
+
+    // 각 지역에서 UPCOMING 전시 가져오기
+    const upcomingExhibitionsPromises = regions.map((region) =>
+      prisma.exhibition.findMany({
+        where: {
+          status: 'UPCOMING',
+          area: region,
+        },
+        take: 20,
+        orderBy: {
+          id: 'desc',
+        },
+        select: {
+          id: true,
+          title: true,
+          startDate: true,
+          endDate: true,
+          place: true,
+          area: true,
+          thumbnail: true,
+          status: true,
+          likes: {
+            select: {
+              id: true,
+            },
+          },
+          visits: {
+            select: {
+              id: true,
+            },
+          },
+          createdAt: true,
+          updatedAt: true,
+        },
+      }),
+    )
+
+    // 모든 UPCOMING 전시 결과를 한 배열에 병합
+    const upcomingExhibitionsArray = await Promise.all(
+      upcomingExhibitionsPromises,
+    )
+    const allUpcomingExhibitions = upcomingExhibitionsArray.flat()
+
+    return { data: allUpcomingExhibitions }
+  } catch (error) {
+    console.error('Error fetching all upcoming exhibitions:', error)
     throw new Error('An error occurred while fetching exhibitions')
   } finally {
     await prisma.$disconnect()
