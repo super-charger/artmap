@@ -126,6 +126,9 @@ module.exports = withBundleAnalyzer({
       },
       {
         hostname: 'loremflickr.com',
+      },
+      {
+        hostname: 'k.kakaocdn.net',
       }
     ],
   },
