@@ -8,6 +8,7 @@ import Apple from "next-auth/providers/apple";
 import Credentials from "next-auth/providers/credentials";
 import { cookies } from 'next/headers'
 import {parse} from 'cookie';
+import {signInSchema} from "@/lib/zod";
 
 
 export const { handlers, auth,signOut,signIn } = NextAuth({
@@ -19,6 +20,7 @@ export const { handlers, auth,signOut,signIn } = NextAuth({
         },
         authorize: async (credentials) => {
             try {
+                // const {email, password} = await signInSchema.parseAsync(credentials); // 주석을 해제하면 zod를 사용하여 유효성 검사를 할 수 있습니다.
                 const authResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/login`, {
                     method: "POST",
                     headers: {
