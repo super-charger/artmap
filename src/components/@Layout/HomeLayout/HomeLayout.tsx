@@ -4,7 +4,7 @@
 import { ReactNode, useCallback, useEffect, useState } from 'react'
 
 import { LAYOUT } from '@/constants/layout'
-import { cn } from '@/utils/utils'
+import { cn } from '@/lib/utils'
 
 import HomeFooter from './components/HomeFooter'
 import HomeHeader from './components/HomeHeader'

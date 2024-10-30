@@ -29,8 +29,8 @@ model Exhibition {
   place     String
   area      String
   thumbnail String?
-  gpsX      String
-  gpsY      String
+  gpsX      Decimal         @db.Decimal(10, 7)
+  gpsY      Decimal         @db.Decimal(10, 7)
   status    ExhibitionStatus
 
   likes  Like[]

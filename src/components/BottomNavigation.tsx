@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation'
 
 import { PAGE_ROUTES, navs } from '@/constants/routes'
 import useActiveNavItems from '@/hooks/useActiveNavItems'
-import { cn } from '@/utils/utils'
+import { cn } from '@/lib/utils'
 
 type IconProps = {
   width: number
@@ -26,12 +26,13 @@ export default function BottomNavigation() {
   const { navItems } = useActiveNavItems(navs)
 
   return (
-    <nav className="relative">
+    <nav className="pointer-events-auto relative">
       <div
         className={cn(
           'fixed bottom-0 left-0 right-0 z-50',
           'm-auto h-[58px] w-full min-w-80 max-w-screen-sm',
           'items-center bg-grayscale_white',
+          'border-color_gray2 border-t',
         )}
       >
         <div className="mx-auto grid h-full max-w-lg grid-cols-5 items-center">

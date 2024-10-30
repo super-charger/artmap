@@ -1,11 +1,16 @@
 import { useCallback, useEffect, useRef } from 'react'
 
-import { MAP_CONSTANTS } from '@/apis/exhibitions/types/model/map'
-import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
+import { useGlobalMapStore } from '@/stores/map/store'
+
+import { useVisibleElements } from '../../hooks/useVisibleElements'
 
 export default function Overlays() {
-  const { map, zoomLevel, visibleElements } = useMapStateContext()
+  const map = useGlobalMapStore((state) => state.map)
   const overlaysRef = useRef<kakao.maps.CustomOverlay[]>([])
+
+  const {
+    visibleElements: { overlays },
+  } = useVisibleElements()
 
   // 모든 오버레이 제거 함수
   const removeAllOverlays = useCallback(() => {
@@ -13,21 +18,19 @@ export default function Overlays() {
     overlaysRef.current = []
   }, [])
 
-  // 카카오 오버레이 로드 함수
-  const loadKakaoOverlays = useCallback(() => {
-    if (!map) return
+  // 오버레이 로드 및 클린업
+  useEffect(() => {
+    if (!map || !overlays) return
+
     removeAllOverlays()
 
-    if (zoomLevel < MAP_CONSTANTS.ZOOM.OVERLAY) return
-
-    const newOverlays = visibleElements.overlays?.map((overlay) => {
-      // 오버레이 콘텐츠 생성
+    const newOverlays = overlays?.map((overlay) => {
       const content = document.createElement('div')
       content.className = 'custom-overlay'
       content.innerHTML = `
         <div class="bg-grayscale_gray5 w-[82px] h-[82px] rounded-full flex flex-col items-center justify-center">
           <span class="font-bold mobile-title-small text-grayscale_white">${overlay.area}</span>
-          <span class="text-grayscale_white mobile-text-large font-bold">${overlay._count.id}</span>
+          <span class="text-grayscale_white mobile-text-large font-bold">${overlay.count}</span>
         </div>
       `
 
@@ -46,24 +49,11 @@ export default function Overlays() {
     })
 
     overlaysRef.current = newOverlays || []
-  }, [map, visibleElements.overlays, zoomLevel])
-
-  // 오버레이 로드 및 클린업
-  useEffect(() => {
-    if (!map || !visibleElements.overlays) return
-
-    loadKakaoOverlays()
 
     return () => {
       removeAllOverlays()
     }
-  }, [
-    map,
-    visibleElements.overlays,
-    zoomLevel,
-    loadKakaoOverlays,
-    removeAllOverlays,
-  ])
+  }, [map, overlays, removeAllOverlays])
 
   return null
 }

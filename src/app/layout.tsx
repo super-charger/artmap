@@ -1,15 +1,14 @@
 import { ReactNode } from 'react'
 
 import { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 
 // import { GoogleAnalytics } from "@next/third-parties/googl";
-import KakaoMapScript from '@/components/KakaoDevelopers/KakaoMapScript'
 import { ENV } from '@/configs/env'
 import AppProvider from '@/providers/AppProvider'
 import fonts from '@/theme/fonts'
 
 import '../css/index.css'
-import {MSWComponent} from "@/components/Nextauth/MSWComponent";
 
 /**
  *
@@ -99,12 +98,16 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <head>
-        <KakaoMapScript />
+      <head suppressHydrationWarning>
+        <Script
+          strategy="beforeInteractive"
+          type="text/javascript"
+          src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_CLIENT}&libraries=services,clusterer&autoload=false`}
+        />
         {/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}
       </head>
       <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
-      {/*<MSWComponent/>*/}
+        {/*<MSWComponent/>*/}
         <AppProvider>{children}</AppProvider>
       </body>
     </html>

@@ -5,25 +5,16 @@ enum ExhibitionStatus {
   ENDED = 'ENDED',
 }
 
-export const MAP_CONSTANTS = {
-  ZOOM: {
-    OVERLAY: 7, // 클러스터가 보이는 최소 줌 레벨
-    MARKER: 6, // 마커가 보이는 최대 줌 레벨
-  },
-  DEFAULT: {
-    LAT: 37.497625203,
-    LNG: 127.03088379,
-    ZOOM: 10,
-  },
-} as const
-
-type OverlayType = {
+export type OverlayApiType = {
   area: string
-  _count: { id: number }
-  position: { lat: number; lng: number }
+  count: number
+  position: {
+    lat: number
+    lng: number
+  }
 }
 
-type ExhibitionType = {
+export type ExhibitionApiType = {
   id: string
   area: string
   title: string
@@ -36,13 +27,11 @@ type ExhibitionType = {
   status: ExhibitionStatus
 }
 
-export type MapElements = {
-  markers: ExhibitionType[]
-  overlays: OverlayType[]
+export type ExhibitionAreaResponse = {
+  exhibitions: ExhibitionApiType[]
+  areaGroups: Record<string, OverlayApiType>
 }
 
-export type MapEventListener = {
-  target: kakao.maps.Map
-  type: string
-  handler: (...args: any[]) => void
+export type AreaPositionType = {
+  [key: string]: { lat: number; lng: number }
 }
