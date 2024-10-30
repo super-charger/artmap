@@ -129,6 +129,12 @@ module.exports = withBundleAnalyzer({
       },
       {
         hostname: 'k.kakaocdn.net',
+      },
+      {
+        hostname: 'ssl.pstatic.net',
+      },
+      {
+        hostname: 'lh3.googleusercontent.com'
       }
     ],
   },
