@@ -4,6 +4,8 @@ export type KakaoMapEventType =
   | 'click'
   | 'dragstart'
   | 'dragend'
+  | 'mouseover'
+  | 'mouseout'
 
 export type MapEventHandlers = {
   [K in KakaoMapEventType]?: () => void
@@ -12,33 +14,36 @@ export type MapEventHandlers = {
 export type MapEventListener = {
   type: string
   handler: () => void
+  target: kakao.maps.Map | kakao.maps.Marker
 }
 
 export class MapEventSubscriber {
-  private map: kakao.maps.Map | null = null
   private eventListeners: MapEventListener[] = []
 
-  subscribe(map: kakao.maps.Map, handlers: MapEventHandlers) {
-    this.unsubscribe()
-    this.map = map
+  subscribe(
+    target: kakao.maps.Map | kakao.maps.Marker,
+    handlers: MapEventHandlers,
+    unsubscribePrevious = true,
+  ) {
+    if (unsubscribePrevious) {
+      this.unsubscribe()
+    }
 
     Object.entries(handlers).forEach(([type, handler]) => {
-      kakao.maps.event.addListener(this.map!, type, handler)
+      kakao.maps.event.addListener(target, type, handler)
       this.eventListeners.push({
         type,
         handler,
+        target,
       })
     })
   }
 
   unsubscribe() {
-    if (!this.map) return
-
-    this.eventListeners.forEach(({ type, handler }) => {
-      kakao.maps.event.removeListener(this.map!, type, handler)
+    this.eventListeners.forEach(({ type, handler, target }) => {
+      kakao.maps.event.removeListener(target, type, handler)
     })
 
     this.eventListeners = []
-    this.map = null
   }
 }
