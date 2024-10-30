@@ -1,14 +1,19 @@
+// ExhibitionPage.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
-
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-import { getAllExhibitions } from '@/actions/getExhibitions'
+import {
+  getAllExhibitions,
+  getOngoingExhibitions,
+  getUpcomingExhibitions,
+} from '@/actions/getExhibitions'
 import { PAGE_ROUTES } from '@/constants/routes'
 
 import FilterModal from './FilterModal'
@@ -18,13 +23,26 @@ export default function ExhibitionPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
   const [isOn, setIsOn] = useState(true)
-  const [selectedRegion, setSelectedRegion] = useState<string>('전체')
+  const [selectedRegion, setSelectedRegion] = useState<string>('서울')
+
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await getAllExhibitions()
-        setExhibitions(result.data.flat() as any[]) // 데이터를 플랫하게 해서 하나의 배열로 만듦
+        setIsLoading(true)
+        const region = searchParams.get('region') || '서울'
+        const status = searchParams.get('status') || 'ONGOING'
+
+        let response
+        if (status === 'ONGOING') {
+          response = await getOngoingExhibitions(region)
+        } else {
+          response = await getUpcomingExhibitions(region)
+        }
+
+        setExhibitions(response.data.flat() as any[])
       } catch (error) {
         console.error('Error fetching exhibitions:', error)
       } finally {
@@ -32,7 +50,7 @@ export default function ExhibitionPage() {
       }
     }
     fetchData()
-  }, [])
+  }, [searchParams])
 
   const toggleFilterModal = () => {
     setIsFilterModalOpen(!isFilterModalOpen)
@@ -63,8 +81,6 @@ export default function ExhibitionPage() {
               </Link>
             </li>
           </ul>
-
-          {/* 돋보기 버튼 */}
           <button className="ml-auto">
             <Image
               src="/icons/system/search-black.svg"
@@ -78,7 +94,6 @@ export default function ExhibitionPage() {
 
       {/* 옵션 패널 */}
       <div className="fixed left-0 right-0 top-[60px] z-40 m-auto flex h-[68.5px] w-full max-w-screen-sm items-center justify-between bg-white px-[12px]">
-        {/* 최신순 텍스트 */}
         <div className="mobile-title flex items-center">
           최신순
           <Image
@@ -90,9 +105,7 @@ export default function ExhibitionPage() {
           />
         </div>
 
-        {/* 오른쪽 버튼들 */}
         <div className="flex items-center gap-2">
-          {/* 셔플 버튼 */}
           <button>
             <Image
               src="/icons/system/shuffle-black.svg"
@@ -102,7 +115,6 @@ export default function ExhibitionPage() {
             />
           </button>
 
-          {/* 필터 버튼 */}
           <button className="ml-2" onClick={toggleFilterModal}>
             <Image
               src="/icons/system/filter-black.svg"
@@ -175,9 +187,7 @@ export default function ExhibitionPage() {
                 <h3 className="mb-1 text-lg font-semibold">
                   {exhibition.title}
                 </h3>
-                <p className="text-sm text-gray-600">
-                  {`${new Date(exhibition.startDate).toLocaleDateString()} ~ ${new Date(exhibition.endDate).toLocaleDateString()}`}
-                </p>
+                <p className="text-sm text-gray-600">{`${new Date(exhibition.startDate).toLocaleDateString()} ~ ${new Date(exhibition.endDate).toLocaleDateString()}`}</p>
                 <p className="text-sm text-gray-600">{exhibition.place}</p>
               </div>
             ))
@@ -188,9 +198,9 @@ export default function ExhibitionPage() {
       {/* 필터 모달 */}
       {isFilterModalOpen && (
         <FilterModal
+          closeModal={toggleFilterModal}
           isOn={isOn}
           toggleSwitch={toggleSwitch}
-          closeModal={toggleFilterModal}
           selectedRegion={selectedRegion}
           setSelectedRegion={setSelectedRegion}
         />

@@ -1,10 +1,10 @@
+// ExhibitionFilterModal.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
-
 import Image from 'next/image'
-
-import { cn } from '@/utils/utils'
+import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 interface ExhibitionFilterModalProps {
   closeModal: () => void
@@ -23,12 +23,13 @@ const FilterModal = ({
 }: ExhibitionFilterModalProps) => {
   const [isClosing, setIsClosing] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
+  const router = useRouter()
 
   // 모달이 열릴 때 애니메이션을 위해 처음 상태 설정
   useEffect(() => {
     setTimeout(() => {
       setIsOpen(true)
-    }, 10) // 약간의 지연을 두어 애니메이션이 정상적으로 적용되도록 함
+    }, 10)
   }, [])
 
   // Escape 키를 눌러 모달을 닫는 이벤트 추가
@@ -52,22 +53,36 @@ const FilterModal = ({
     }, 150) // 닫힐 때 애니메이션 시간 설정 (150ms)
   }
 
+  // 필터 적용 함수
+  const applyFilters = () => {
+    // 필터 적용 후 쿼리 스트링 업데이트
+    const query = new URLSearchParams()
+    if (selectedRegion !== '서울') {
+      query.set('region', selectedRegion)
+    }
+    if (isOn) {
+      query.set('status', 'ONGOING')
+    } else {
+      query.set('status', 'UPCOMING')
+    }
+    router.push(`?${query.toString()}`)
+    initiateClose()
+  }
+
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50">
       {/* 모달 본체 */}
       <div
         className={cn(
           'w-full max-w-screen-sm rounded-t-[20px] bg-white transition-transform ease-in-out',
-          isClosing ?
-            'translate-y-full duration-150' // 닫힐 때 빠르게 닫히도록 설정 (150ms)
-          : isOpen ?
-            'translate-y-0 duration-300' // 열릴 때 애니메이션 설정 (300ms)
+          isClosing ? 'translate-y-full duration-150'
+          : isOpen ? 'translate-y-0 duration-300'
           : 'translate-y-full',
           !isClosing && 'animate-slide-up-from-50',
         )}
       >
         {/* 모달 헤더 */}
-        <div className="flex h-[70px] items-center justify-between border-b border-grayscale_gray2 px-[18px]">
+        <div className="flex h-[70px] items-center justify-between border-b border-grayscale_gray2 px-[20px]">
           <span className="mobile-title-large w-full text-center">
             필터 설정
           </span>
@@ -128,8 +143,12 @@ const FilterModal = ({
           </div>
         </div>
 
+        {/* 찾아보기 버튼 */}
         <div className="flex h-[150px] items-center px-[18px] pb-14">
-          <button className="mobile-button h-[50px] w-full rounded bg-black text-white">
+          <button
+            className="mobile-button h-[50px] w-full rounded bg-black text-white"
+            onClick={applyFilters}
+          >
             찾아보기
           </button>
         </div>
