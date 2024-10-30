@@ -31,6 +31,8 @@ export type MapEventType =
   | 'ZOOM_CHANGED'
   | 'MAP_READY'
   | 'MARKER_CLICKED'
+  | 'DRAG_START'
+  | 'DRAG_END'
 
 export type MapEventPayloads = {
   BOUNDS_CHANGED: {
@@ -48,6 +50,8 @@ export type MapEventPayloads = {
   MARKER_CLICKED: {
     marker: ExhibitionApiType
   }
+  DRAG_START: {}
+  DRAG_END: {}
 }
 
 export type EventBusType = {
@@ -68,6 +72,7 @@ export const MAP_OPTIONS = {
   ZOOM: {
     OVERLAY: 7, // 클러스터가 보이는 최소 줌 레벨
     MARKER: 6, // 마커가 보이는 최대 줌 레벨
+    DETAIL: 3, // 상세 정보 보이는 최소 줌 레벨
   },
   DEFAULT: {
     LAT: 37.497625203,
@@ -77,6 +82,7 @@ export const MAP_OPTIONS = {
 } as const
 
 export const MARKER_CONSTANTS = {
+  DEFAULT: 6,
   GRID_SIZE: 60,
   MIN_CLUSTER_SIZE: 2,
   CLUSTER_STYLES: [
@@ -96,5 +102,5 @@ export const MARKER_CONSTANTS = {
     OFFSET: { x: 20, y: 40 },
     PATH: '/icons/tab/map-on.svg',
   },
-  DEBOUNCE_DELAY: 300,
+  DRAGGING_OFFSET: 2,
 } as const

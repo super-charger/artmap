@@ -4,6 +4,7 @@ import { createStoreContext, withSetter } from '@toktokhan-dev/zustand-react'
 
 import { immer } from 'zustand/middleware/immer'
 
+import { ExhibitionApiType } from '@/apis/exhibitions/types/model/map'
 import { MAP_OPTIONS } from '@/app/(has-navigation)/exhibitions/location/_source/types/map'
 
 type MapState = {
@@ -13,6 +14,7 @@ type MapState = {
     latitude: number
     longitude: number
   } | null
+  selectedExhibition: ExhibitionApiType[] | null
   visibleAreas: string[]
 }
 
@@ -27,6 +29,7 @@ export const {
       bounds: null,
       visibleAreas: ['서울', '경기', '인천'],
       center: null,
+      selectedExhibition: [],
     })),
   ),
 )
