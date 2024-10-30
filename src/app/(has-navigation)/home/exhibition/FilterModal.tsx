@@ -1,3 +1,4 @@
+// ExhibitionFilterModal.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -58,13 +59,17 @@ const FilterModal = ({
     const query = new URLSearchParams()
     if (selectedRegion !== '전체') {
       query.set('region', selectedRegion)
-    }
-    // 전시중 버튼이 off이면 status를 UPCOMING_AND_ENDED으로 설정
-    if (!isOn) {
-      query.set('status', 'UPCOMING_AND_ENDED')
     } else {
-      query.set('status', 'ONGOING')
+      query.set('region', '전체') // 기본적으로 '전체'로 설정
     }
+
+    if (isOn) {
+      query.set('status', 'ONGOING')
+    } else {
+      query.set('status', 'UPCOMING_AND_ENDED')
+    }
+
+    // 쿼리 스트링이 설정되었을 때, 잘못된 값이 없는지 확인하여 router.push
     router.push(`?${query.toString()}`)
     initiateClose()
   }

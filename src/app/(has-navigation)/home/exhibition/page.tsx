@@ -2,7 +2,6 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -20,17 +19,23 @@ import { PAGE_ROUTES } from '@/constants/routes'
 
 import FilterModal from './FilterModal'
 
+// HTML 엔티티를 디코딩하는 함수
+function decodeHtmlEntities(text: string) {
+  const txt = document.createElement('textarea')
+  txt.innerHTML = text
+  return txt.value
+}
+
 export default function ExhibitionPage() {
   const [exhibitions, setExhibitions] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
-  const [isOn, setIsOn] = useState(true) // 전시중 상태 (default: true)
+  const [isOn, setIsOn] = useState(true)
   const [selectedRegion, setSelectedRegion] = useState<string>('전체')
 
   const router = useRouter()
   const searchParams = useSearchParams()
 
-  // response 데이터가 배열이 맞는지 확인 후 flat 호출
   useEffect(() => {
     async function fetchData() {
       try {
@@ -39,19 +44,24 @@ export default function ExhibitionPage() {
         const status = searchParams.get('status') || 'ONGOING'
 
         let response
-        if (region === '전체') {
-          if (status === 'ONGOING') {
-            response = await getAllExhibitions()
-          } else if (status === 'UPCOMING_AND_ENDED') {
-            response = await getAllUpcomingExhibitions() // 새로운 함수 호출
-          }
+        if (region === '전체' && status === 'ONGOING') {
+          response = await getAllExhibitions()
+        } else if (region === '전체' && status === 'UPCOMING_AND_ENDED') {
+          response = await getAllUpcomingExhibitions()
         } else if (status === 'ONGOING') {
           response = await getOngoingExhibitions(region)
-        } else if (status === 'UPCOMING_AND_ENDED') {
+        } else {
           response = await getUpcomingExhibitions(region)
         }
 
-        setExhibitions(response.data.flat() as any[])
+        // 응답이 존재하면 데이터를 디코딩하고 설정
+        if (response && response.data) {
+          const decodedData = response.data.map((exhibition: any) => ({
+            ...exhibition,
+            title: decodeHtmlEntities(exhibition.title),
+          }))
+          setExhibitions(decodedData)
+        }
       } catch (error) {
         console.error('Error fetching exhibitions:', error)
       } finally {
@@ -161,10 +171,7 @@ export default function ExhibitionPage() {
                     className="rounded"
                   />
                 </div>
-                <div
-                  className="justify-left my-1 flex"
-                  style={{ marginTop: '12px', marginBottom: '9px' }}
-                >
+                <div className="justify-left my-1 flex">
                   {exhibition.status === 'ONGOING' && (
                     <Image
                       src="/icons/content/exhibition-ongoing.svg"
@@ -196,7 +203,11 @@ export default function ExhibitionPage() {
                 <h3 className="mb-1 text-lg font-semibold">
                   {exhibition.title}
                 </h3>
-                <p className="text-sm text-gray-600">{`${new Date(exhibition.startDate).toLocaleDateString()} ~ ${new Date(exhibition.endDate).toLocaleDateString()}`}</p>
+                <p className="text-sm text-gray-600">{`${new Date(
+                  exhibition.startDate,
+                ).toLocaleDateString()} ~ ${new Date(
+                  exhibition.endDate,
+                ).toLocaleDateString()}`}</p>
                 <p className="text-sm text-gray-600">{exhibition.place}</p>
               </div>
             ))
