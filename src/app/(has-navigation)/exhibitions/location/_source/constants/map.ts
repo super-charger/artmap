@@ -44,3 +44,9 @@ export const AREA_NAME_MAP: Record<string, string> = {
   충청남도: '충남',
   충청북도: '충북',
 } as const
+
+export const STATUS_TYPE = {
+  UPCOMING: '전시예정',
+  ONGOING: '전시중',
+  ENDED: '전시종료',
+} as const
