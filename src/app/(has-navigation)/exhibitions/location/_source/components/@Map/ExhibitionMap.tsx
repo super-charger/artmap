@@ -14,6 +14,9 @@ import {
 } from '../../constants/map'
 import { mapEventBus } from '../../map-event-bus'
 import { MAP_OPTIONS, NAMESPACE_KEY } from '../../types/map'
+import MarkerInfoCard from './@MarkerInfo/MarkerInfoCard'
+import MarkerInfoCarousel from './@MarkerInfo/MarkerInfoCarousel'
+import DetailMarkers from './DetailMarker'
 import MapInit from './MapInit'
 import Markers from './Markers'
 import Overlays from './Overlays'
@@ -37,6 +40,7 @@ const DEFAULT_OPTIONS = {
 
 export default function ExhibitionMap() {
   const isInitialMove = useRef(true)
+
   const map = useGlobalMapStore((state) => state.map)
   const set = useMapStateContext((state) => state.set)
 
@@ -49,6 +53,7 @@ export default function ExhibitionMap() {
     }) => {
       set('zoomLevel', payload.level)
       set('bounds', payload.bounds)
+      set('selectedExhibition', null)
     }
 
     const unsubscribeZoom = mapEventBus.on(
@@ -100,6 +105,15 @@ export default function ExhibitionMap() {
       <MapInit options={DEFAULT_OPTIONS} />
       <Overlays />
       <Markers />
+      <DetailMarkers />
+      <MarkerInfoCarousel
+        renderItem={(selectedExhibition) => (
+          <MarkerInfoCard
+            key={selectedExhibition.id} //
+            {...selectedExhibition}
+          />
+        )}
+      />
     </>
   )
 }
