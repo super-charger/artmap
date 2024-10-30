@@ -1,4 +1,3 @@
-// ExhibitionFilterModal.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
@@ -57,13 +56,14 @@ const FilterModal = ({
   const applyFilters = () => {
     // 필터 적용 후 쿼리 스트링 업데이트
     const query = new URLSearchParams()
-    if (selectedRegion !== '서울') {
+    if (selectedRegion !== '전체') {
       query.set('region', selectedRegion)
     }
-    if (isOn) {
-      query.set('status', 'ONGOING')
+    // 전시중 버튼이 off이면 status를 UPCOMING_AND_ENDED으로 설정
+    if (!isOn) {
+      query.set('status', 'UPCOMING_AND_ENDED')
     } else {
-      query.set('status', 'UPCOMING')
+      query.set('status', 'ONGOING')
     }
     router.push(`?${query.toString()}`)
     initiateClose()

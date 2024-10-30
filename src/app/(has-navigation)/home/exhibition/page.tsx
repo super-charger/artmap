@@ -2,6 +2,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -13,6 +14,7 @@ import {
   getAllExhibitions,
   getOngoingExhibitions,
   getUpcomingExhibitions,
+  getAllUpcomingExhibitions,
 } from '@/actions/getExhibitions'
 import { PAGE_ROUTES } from '@/constants/routes'
 
@@ -22,23 +24,30 @@ export default function ExhibitionPage() {
   const [exhibitions, setExhibitions] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
-  const [isOn, setIsOn] = useState(true)
-  const [selectedRegion, setSelectedRegion] = useState<string>('서울')
+  const [isOn, setIsOn] = useState(true) // 전시중 상태 (default: true)
+  const [selectedRegion, setSelectedRegion] = useState<string>('전체')
 
   const router = useRouter()
   const searchParams = useSearchParams()
 
+  // response 데이터가 배열이 맞는지 확인 후 flat 호출
   useEffect(() => {
     async function fetchData() {
       try {
         setIsLoading(true)
-        const region = searchParams.get('region') || '서울'
+        const region = searchParams.get('region') || '전체'
         const status = searchParams.get('status') || 'ONGOING'
 
         let response
-        if (status === 'ONGOING') {
+        if (region === '전체') {
+          if (status === 'ONGOING') {
+            response = await getAllExhibitions()
+          } else if (status === 'UPCOMING_AND_ENDED') {
+            response = await getAllUpcomingExhibitions() // 새로운 함수 호출
+          }
+        } else if (status === 'ONGOING') {
           response = await getOngoingExhibitions(region)
-        } else {
+        } else if (status === 'UPCOMING_AND_ENDED') {
           response = await getUpcomingExhibitions(region)
         }
 
