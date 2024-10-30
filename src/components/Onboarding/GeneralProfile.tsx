@@ -23,7 +23,7 @@ export default function GeneralProfile({profileImage}: GeneralProfileProps) {
             <div className="absolute flex-col items-start justify-center w-full mt-[60px]">
                 <div className="flex-col flex">
                     <div className="h-[100px] relative flex items-center justify-center">
-                        <div className="w-[100px] h-[100px] relative overflow-hidden rounded-full">
+                        <div className="w-[100px] h-[100px] relative overflow-hidden rounded-full border-2">
                             <Image
                                 src={typeof profileImage === 'string' ? profileImage : '/icons/profile/profile-m.svg'}
                                 alt={"profile-m"}
