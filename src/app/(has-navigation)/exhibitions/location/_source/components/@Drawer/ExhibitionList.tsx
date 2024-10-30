@@ -4,19 +4,16 @@ import { useVisibleElements } from '../../hooks/useVisibleElements'
 import ExhibitionSkeleton from './\bExhibitionSkeleton'
 import ExhibitionItem from './ExhibitionItem'
 
+// TODO: 무한스크롤
 export default function ExhibitionList() {
   const {
     visibleElements: { exhibitions },
     isLoading,
-    error,
+    isError,
   } = useVisibleElements()
 
-  if (error) {
-    return (
-      <div className="text-red-500">
-        Error loading exhibitions: {error.message}
-      </div>
-    )
+  if (isError) {
+    return <div className="text-red-500">Error loading exhibitions</div>
   }
 
   if (isLoading) {
