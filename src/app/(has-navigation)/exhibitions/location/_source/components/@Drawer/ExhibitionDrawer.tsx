@@ -20,7 +20,7 @@ export default function ExhibitionDrawer() {
       open={isOpen}
       onOpenChange={setIsOpen}
       shouldScaleBackground={false}
-      snapPoints={[0.15, 1]}
+      snapPoints={[0.13, 1]}
       dismissible={false}
     >
       <DrawerContent
