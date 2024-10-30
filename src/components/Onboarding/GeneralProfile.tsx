@@ -6,8 +6,8 @@ import { z } from "zod";
 
 const nicknameSchema = z
     .string()
-    .min(1, "값을 입력해야 합니다.")
-    .max(255, "입력 값이 너무 깁니다.")
+    .min(3, "닉네임은 3글자를 넘어야 합니다.")
+    .max(20, "닉네임이 너무 깁니다.")
     .regex(/^[^'";]+$/, "SQL 인젝션 공격이 의심되는 문자는 포함할 수 없습니다.")
     .refine(
         (value) => !/(\b(SELECT|INSERT|DELETE|UPDATE|DROP|UNION|--|\bOR\b|\bAND\b)\b)/i.test(value),
@@ -34,7 +34,7 @@ export default function GeneralProfile({ profileImage }: GeneralProfileProps) {
             setError((e as z.ZodError).issues[0].message);
         }
     };
-    
+
     const handleNextClick = () => {
         try {
             nicknameSchema.parse(nickname);
