@@ -21,24 +21,61 @@ enum ExhibitionStatus {
   ENDED
 }
 
+
 model Exhibition {
   id        String           @id
   title     String
   startDate DateTime
   endDate   DateTime
   place     String
-  area      String
+  area      String          // 기존 필드 유지
   thumbnail String?
   gpsX      Decimal         @db.Decimal(10, 7)
   gpsY      Decimal         @db.Decimal(10, 7)
   status    ExhibitionStatus
+
+
+  districtId String
+  district   AdminDistrict @relation(fields: [districtId], references: [id])
 
   likes  Like[]
   visits Visit[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([startDate, endDate])
+  @@index([gpsX, gpsY])
+  @@index([area])
+  @@index([districtId])
 }
+
+model AdminDistrict {
+  id        String   @id @default(cuid())
+  sido      String               // 시/도 이름 (예: '서울', '인천')
+  sigungu      String             // 구/군 이름 (예: '마포구', '강남구')
+
+  gpsX      Decimal  @db.Decimal(10, 7)  // 중심점 경도
+  gpsY      Decimal  @db.Decimal(10, 7)  // 중심점 위도
+  bounds    Json     // 행정구역 경계 좌표
+
+  // 행정표준코드
+  code    String  // 시도 코드
+  subCode String // 시군구 코드
+  level   Int     // 1: 시도, 2: 시군구
+  exhibitions Exhibition[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sido])              // 시/도 기반 검색 최적화
+  @@index([gpsX, gpsY])       // 위치 기반 쿼리 최적화
+  @@unique([sido, sigungu])      // 시/도 + 구/군 조합의 유일성 보장
+  @@index([level])
+}
+
+
 
 model User {
   id     String  @id @default(uuid())
