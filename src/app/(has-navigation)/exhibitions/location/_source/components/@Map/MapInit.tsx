@@ -28,7 +28,6 @@ export default function MapInit({ options, ...props }: MapProps) {
   const set = useGlobalMapStore((state) => state.set)
   const reset = useGlobalMapStore((state) => state.reset)
 
-  // 맵 초기화 및 이벤트 설정
   useEffect(() => {
     if (!containerRef.current) return
     const subscriber = eventSubscriberRef.current
@@ -40,7 +39,7 @@ export default function MapInit({ options, ...props }: MapProps) {
 
         set('map', mapInstance)
 
-        eventSubscriberRef.current.subscribe(mapInstance, {
+        subscriber.subscribe(mapInstance, {
           zoom_changed: () => {
             const level = mapInstance.getLevel()
             const bounds = mapInstance.getBounds()
@@ -52,8 +51,6 @@ export default function MapInit({ options, ...props }: MapProps) {
             })
           },
           bounds_changed: () => {
-            if (!mapInstance) return
-
             const bounds = mapInstance.getBounds()
             const level = mapInstance.getLevel()
 
