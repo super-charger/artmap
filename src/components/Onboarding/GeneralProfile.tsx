@@ -1,29 +1,63 @@
-'use client'
-import {useState} from "react";
-import {useRouter} from "next/navigation";
+"use client";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { z } from "zod";
 
-export default function GeneralProfile() {
+const nicknameSchema = z
+    .string()
+    .min(3, "닉네임은 3글자를 넘어야 합니다.")
+    .max(20, "닉네임이 너무 깁니다.")
+    .regex(/^[^'";]+$/, "SQL 인젝션 공격이 의심되는 문자는 포함할 수 없습니다.")
+    .refine(
+        (value) => !/(\b(SELECT|INSERT|DELETE|UPDATE|DROP|UNION|--|\bOR\b|\bAND\b)\b)/i.test(value),
+        { message: "SQL 인젝션 공격이 의심되는 패턴이 포함되어 있습니다." }
+    );
+
+type GeneralProfileProps = {
+    profileImage: string | null | undefined;
+};
+
+export default function GeneralProfile({ profileImage }: GeneralProfileProps) {
     const [nickname, setNickname] = useState<string>("");
+    const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
     const handleNicknameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setNickname(event.target.value);
+        const newNickname = event.target.value;
+        setNickname(newNickname);
+
+        try {
+            nicknameSchema.parse(newNickname);
+            setError(null);
+        } catch (e) {
+            setError((e as z.ZodError).issues[0].message);
+        }
     };
 
     const handleNextClick = () => {
-        router.push('/onboarding/terms');
+        try {
+            nicknameSchema.parse(nickname);
+            router.push("/onboarding/terms");
+        } catch (e) {
+            setError((e as z.ZodError).issues[0].message);
+        }
     };
+
     return (
         <div className="w-full h-full bg-white flex flex-col">
             <div className="absolute flex-col items-start justify-center w-full mt-[60px]">
                 <div className="flex-col flex">
-                    <div className="h-[70px] relative flex items-center justify-center">
-                        <div className="w-[70px] h-[70px] absolute">
-                            <Image src={"/icons/profile/profile-m.svg"} alt={"profile-m"} width={70} height={70}/>
+                    <div className="h-[100px] relative flex items-center justify-center">
+                        <div className="w-[100px] h-[100px] relative overflow-hidden rounded-full border-2">
+                            <Image
+                                src={typeof profileImage === "string" ? profileImage : "/icons/profile/profile-m.svg"}
+                                alt={"profile-m"}
+                                fill={true}
+                                className="object-cover"
+                            />
                         </div>
                     </div>
-                    {/* 가운데 정렬을 하는 것은 어떨지 고민 */}
                     <div className="flex-col flex items-start gap-2.5 m-[16px] mt-12">
                         <div className="text-black text-xs font-bold font-['Noto Sans KR'] leading-[18px]">닉네임</div>
                         <div className="flex-grow h-10 flex items-center border-b-4">
@@ -35,20 +69,21 @@ export default function GeneralProfile() {
                                 placeholder="닉네임을 입력해 주세요."
                             />
                         </div>
+                        {error && <div className="text-red-500 text-xs mt-2">{error}</div>}
                     </div>
                 </div>
             </div>
-
-
-            {/* 하단 버튼 컴포넌트 분리 고려 중 */}
-            <div className='w-full justify-center flex absolute bottom-4'>
+            <div className="w-full justify-center flex absolute bottom-4">
                 <button
-                    className={`w-[calc(100%-32px)] h-[50px] rounded-[5px] justify-center items-center inline-flex ${nickname ? 'bg-[#1a1a1a]' : 'bg-[#bebebe]'}`}
-                    disabled={!nickname}
-                    onClick={handleNextClick}>
+                    className={`w-[calc(100%-32px)] h-[50px] rounded-[5px] justify-center items-center inline-flex ${
+                        nickname && !error ? "bg-[#1a1a1a]" : "bg-[#bebebe]"
+                    }`}
+                    disabled={!nickname || !!error}
+                    onClick={handleNextClick}
+                >
                     <div className="text-white text-base font-bold font-['Noto Sans KR'] leading-7 flex">다음</div>
                 </button>
             </div>
         </div>
-    )
+    );
 }
