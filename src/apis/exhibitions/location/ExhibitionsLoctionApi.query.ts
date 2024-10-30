@@ -1,9 +1,10 @@
-import { ExhibitionStatus } from '@prisma/client'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { getExhibitionsWithArea } from '@/app/(has-navigation)/exhibitions/location/_source/actions/getExhibitionsWithArea'
 import { UseMutationParams } from '@/types/module/react-query/use-mutation-params'
 import { UseQueryParams } from '@/types/module/react-query/use-query-params'
+
+import { ExhibitionStatus } from '../types/model/map'
 
 export const EXHIBITIONS_API_QUERY_KEY = {
   GET_EXHIBITIONS_WITH_AREA: () => ['create-exhibitions-with-area'],
