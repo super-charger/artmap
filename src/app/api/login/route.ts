@@ -5,7 +5,7 @@ const User = [
 export const POST = async () => {
     return HttpResponse.json(User[0], {
         headers: {
-            'Set-Cookie': 'connect.sid=msw-cookie;HttpOnly;Path=/'
+            'Set-Cookie': 'connect.sid=api-route;HttpOnly;Path=/'
         }
     })
 }
