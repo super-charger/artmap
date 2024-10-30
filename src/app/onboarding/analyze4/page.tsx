@@ -22,7 +22,7 @@ export default function Page() {
             <OnboardingTitle>내가 관심있는 색상을<br/>전부 골라주세요.</OnboardingTitle>
             <GenreContainer>
                 {COLOR.map((color,index) => (
-                    <GenreButton key={color[index]}>
+                    <GenreButton key={color}>
                         {color}
                     </GenreButton>
                 ))}
