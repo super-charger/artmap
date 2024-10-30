@@ -29,22 +29,13 @@ export const { handlers, auth,signOut,signIn } = NextAuth({
                         password: credentials.password,
                     }),
                 });
-
                 if (!authResponse.ok) {
                     throw new Error(`Failed to authenticate: ${authResponse.statusText}`);
                 }
-
-                let setCookie = authResponse.headers.get('Set-Cookie');
-                if (setCookie) {
-                    const parsed: any = parse(setCookie);
-                    cookies().set('connect.sid', parsed['connect.sid'], parsed);
-                }
-
                 const user = await authResponse.json();
                 return {
-                    email: user.id,
-                    ...user,
-                };
+                email: user.id,
+                ...user,};
             } catch (error) {
                 console.error('Error during authentication:', error);
                 return null;
