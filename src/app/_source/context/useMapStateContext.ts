@@ -4,7 +4,8 @@ import { createStoreContext, withSetter } from '@toktokhan-dev/zustand-react'
 
 import { immer } from 'zustand/middleware/immer'
 
-import { MAP_OPTIONS } from '@/app/(has-navigation)/exhibitions/location/_source/types/map'
+import { ExhibitionApiType } from '@/apis/exhibitions/types/model/map'
+import { MAP_OPTIONS } from '@/app/(has-navigation)/exhibitions/location/_source/constants/map'
 
 type MapState = {
   zoomLevel: number
@@ -13,7 +14,7 @@ type MapState = {
     latitude: number
     longitude: number
   } | null
-  visibleAreas: string[]
+  selectedExhibition: ExhibitionApiType[] | null
 }
 
 export const {
@@ -25,8 +26,8 @@ export const {
     immer<MapState>(() => ({
       zoomLevel: MAP_OPTIONS.DEFAULT.ZOOM,
       bounds: null,
-      visibleAreas: ['서울', '경기', '인천'],
       center: null,
+      selectedExhibition: [],
     })),
   ),
 )

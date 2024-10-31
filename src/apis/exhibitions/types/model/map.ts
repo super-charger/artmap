@@ -1,5 +1,5 @@
 // TODO: tRPC
-enum ExhibitionStatus {
+export enum ExhibitionStatus {
   UPCOMING = 'UPCOMING',
   ONGOING = 'ONGOING',
   ENDED = 'ENDED',

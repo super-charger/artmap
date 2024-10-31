@@ -1,8 +1,9 @@
 'use server'
 
-import { ExhibitionStatus } from '@prisma/client'
-
-import { OverlayApiType } from '@/apis/exhibitions/types/model/map'
+import {
+  ExhibitionStatus,
+  OverlayApiType,
+} from '@/apis/exhibitions/types/model/map'
 import prisma from '@/apis/prismaClient'
 
 import { areaCenterPosition, defaultPosition } from '../constants/map'
