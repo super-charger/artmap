@@ -5,7 +5,8 @@ import BottomNavigation from '@/components/BottomNavigation'
 export default function MainLayout({ children }: { children: ReactNode }) {
   return (
     <>
-        <Suspense fallback={<div>Loading...</div>}>  // update: 임시 Suspense 추가
+        {/*update: 임시 Suspense 추가*/}
+        <Suspense fallback={<div>Loading...</div>}>
       {children}
       <BottomNavigation />
         </Suspense>
