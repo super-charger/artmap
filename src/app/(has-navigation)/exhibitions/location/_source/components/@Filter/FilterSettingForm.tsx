@@ -1,10 +1,16 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 
+import {
+  EXHIBITIONS_API_QUERY_KEY,
+  useUpdateExhibitionFilterMutation,
+} from '@/apis/exhibitions/location/ExhibitionsLoctionApi.query'
+import { ExhibitionStatus } from '@/apis/exhibitions/types/model/map'
 import {
   Form,
   FormControl,
@@ -17,6 +23,8 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Switch } from '@/components/ui/switch'
 import { cn } from '@/lib/utils'
 
+import { useMapFilter } from '../../hooks/useMapFilter'
+
 const ExhibitionListType = {
   전체: { value: 'ALL', label: '전체' },
   좋아요: { value: 'LIKED', label: '좋아요 한 전시' },
@@ -24,7 +32,7 @@ const ExhibitionListType = {
 } as const
 
 const FormSchema = z.object({
-  status: z.boolean().default(false).optional(),
+  status: z.enum([ExhibitionStatus.ONGOING, ExhibitionStatus.ENDED]),
   type: z.enum(['ALL', 'LIKED', 'VISITED']),
 })
 
@@ -33,16 +41,48 @@ type FilterSettingFormProps = {
 }
 
 export default function FilterSettingForm({ actions }: FilterSettingFormProps) {
+  const queryClient = useQueryClient()
+
+  const { status, updateFilter } = useMapFilter()
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      status: true,
+      status: status ?? ExhibitionStatus.ONGOING,
       type: 'ALL',
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data, 'data')
+  const {
+    mutate: updateFilterMutation,
+    isPending,
+    isError,
+  } = useUpdateExhibitionFilterMutation({
+    options: {
+      onSuccess: (data, variables) => {
+        queryClient.setQueryData(
+          EXHIBITIONS_API_QUERY_KEY.UPDATE_EXHIBITIONS_WITH_AREA({
+            status: variables?.status,
+          }),
+          data,
+        )
+      },
+      onError: (error) => {
+        console.log(error)
+      },
+    },
+  })
+
+  const onSubmit = (formData: z.infer<typeof FormSchema>) => {
+    // Url 업데이트
+    updateFilter({
+      newStatus: formData.status as ExhibitionStatus,
+    })
+
+    // 서버에 필터 업데이트 요청
+    updateFilterMutation({
+      status: formData.status as ExhibitionStatus,
+    })
   }
 
   return (
@@ -59,13 +99,20 @@ export default function FilterSettingForm({ actions }: FilterSettingFormProps) {
               <FormLabel className="form-label">전시중</FormLabel>
               <FormControl>
                 <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+                  checked={field.value === ExhibitionStatus.ONGOING}
+                  onCheckedChange={(checked) => {
+                    field.onChange(
+                      checked ?
+                        ExhibitionStatus.ONGOING
+                      : ExhibitionStatus.ENDED,
+                    )
+                  }}
                 />
               </FormControl>
             </FormItem>
           )}
         />
+
         <FormField
           control={form.control}
           name="type"
@@ -76,7 +123,7 @@ export default function FilterSettingForm({ actions }: FilterSettingFormProps) {
                 <RadioGroup
                   onValueChange={field.onChange}
                   defaultValue={field.value}
-                  className="item-center flex flex-col gap-4"
+                  className="flex flex-col gap-4"
                 >
                   {Object.entries(ExhibitionListType).map(
                     ([key, { value, label }]) => (
@@ -109,7 +156,14 @@ export default function FilterSettingForm({ actions }: FilterSettingFormProps) {
 
         <div className="h-[70px]"></div>
         <div className="fixed bottom-0 flex h-[70px] w-full max-w-screen-sm items-center px-4 pb-2">
-          {actions}
+          <div className="w-full">
+            {isError && (
+              <p className="mb-2 text-sm text-destructive">
+                필터 적용 중 오류가 발생했습니다
+              </p>
+            )}
+            <div className={cn({ 'opacity-50': isPending })}>{actions}</div>
+          </div>
         </div>
       </form>
     </Form>
