@@ -38,7 +38,7 @@ export default function MarkerInfoCard(props: ExhibitionApiType) {
           </div>
           <div className="min-w-0 flex-1">
             <CardHeader className="p-0">
-              <CardTitle className="line-clamp-1 text-lg">
+              <CardTitle className="max-w-[360px] truncate text-lg">
                 {formattedTitle}
               </CardTitle>
               <span

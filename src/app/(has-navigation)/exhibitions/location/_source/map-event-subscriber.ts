@@ -1,28 +1,14 @@
-export type KakaoMapEventType =
-  | 'zoom_changed'
-  | 'bounds_changed'
-  | 'click'
-  | 'dragstart'
-  | 'dragend'
-  | 'mouseover'
-  | 'mouseout'
-
-export type MapEventHandlers = {
-  [K in KakaoMapEventType]?: () => void
-}
-
-export type MapEventListener = {
-  type: string
-  handler: () => void
-  target: kakao.maps.Map | kakao.maps.Marker
-}
+import {
+  MapEventSubscriberHandlers,
+  MapEventSubscriberListener,
+} from './types/map'
 
 export class MapEventSubscriber {
-  private eventListeners: MapEventListener[] = []
+  private eventListeners: MapEventSubscriberListener[] = []
 
   subscribe(
     target: kakao.maps.Map | kakao.maps.Marker,
-    handlers: MapEventHandlers,
+    handlers: MapEventSubscriberHandlers,
     unsubscribePrevious = true,
   ) {
     if (unsubscribePrevious) {

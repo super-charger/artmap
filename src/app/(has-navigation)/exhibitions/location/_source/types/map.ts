@@ -10,21 +10,16 @@ export type MapElements = {
   overlays: OverlayApiType[]
 }
 
-export type KakaoMapEventType =
+export type KakaoMapEventSubscriberType =
   | 'zoom_changed'
   | 'bounds_changed'
   | 'click'
   | 'dragstart'
   | 'dragend'
-
-export type MapEventHandlers = {
-  [K in KakaoMapEventType]: () => void
-}
-
-export type MapEventListener = {
-  type: string
-  handler: (...args: any[]) => void
-}
+  | 'mouseover'
+  | 'mouseout'
+  | 'center_changed'
+  | 'drag'
 
 export type MapEventType =
   | 'BOUNDS_CHANGED'
@@ -33,6 +28,23 @@ export type MapEventType =
   | 'MARKER_CLICKED'
   | 'DRAG_START'
   | 'DRAG_END'
+  | 'DRAGGING'
+  | 'CENTER_CHANGED'
+
+export type MapEventSubscriberHandlers = {
+  [K in KakaoMapEventSubscriberType]?: () => void
+}
+
+export type MapEventSubscriberListener = {
+  type: string
+  handler: () => void
+  target: kakao.maps.Map | kakao.maps.Marker
+}
+
+export type MapEventListener = {
+  type: string
+  handler: (...args: any[]) => void
+}
 
 export type MapEventPayloads = {
   BOUNDS_CHANGED: {
@@ -50,8 +62,20 @@ export type MapEventPayloads = {
   MARKER_CLICKED: {
     marker: ExhibitionApiType
   }
+  CENTER_CHANGED: {
+    center: kakao.maps.LatLng
+    level: number
+  }
   DRAG_START: {}
-  DRAG_END: {}
+  DRAG_END: {
+    center: kakao.maps.LatLng
+    level: number
+  }
+  DRAGGING: {
+    center: kakao.maps.LatLng
+    level: number
+    isDragging: boolean
+  }
 }
 
 export type EventBusType = {
@@ -67,40 +91,3 @@ export type EventBusType = {
   ) => () => void
   cleanup: () => void
 }
-
-export const MAP_OPTIONS = {
-  ZOOM: {
-    OVERLAY: 7, // 클러스터가 보이는 최소 줌 레벨
-    MARKER: 6, // 마커가 보이는 최대 줌 레벨
-    DETAIL: 3, // 상세 정보 보이는 최소 줌 레벨
-  },
-  DEFAULT: {
-    LAT: 37.497625203,
-    LNG: 127.03088379,
-    ZOOM: 10,
-  },
-} as const
-
-export const MARKER_CONSTANTS = {
-  DEFAULT: 6,
-  GRID_SIZE: 60,
-  MIN_CLUSTER_SIZE: 2,
-  CLUSTER_STYLES: [
-    {
-      width: '30px',
-      height: '30px',
-      background: 'rgba(68, 68, 68, .8)',
-      borderRadius: '15px',
-      color: '#fff',
-      textAlign: 'center',
-      fontWeight: 'bold',
-      lineHeight: '31px',
-    },
-  ],
-  DEFAULT_IMAGE: {
-    SIZE: { width: 40, height: 40 },
-    OFFSET: { x: 20, y: 40 },
-    PATH: '/icons/tab/map-on.svg',
-  },
-  DRAGGING_OFFSET: 2,
-} as const
