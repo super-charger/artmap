@@ -1,11 +1,15 @@
+'use client'
+
+import React from 'react'
+
 import { ExhibitionApiType } from '@/apis/exhibitions/types/model/map'
 
 import { useVisibleElements } from '../../hooks/useVisibleElements'
-import ExhibitionSkeleton from './\bExhibitionSkeleton'
 import ExhibitionItem from './ExhibitionItem'
+import ExhibitionSkeleton from './ExhibitionSkeleton'
 
 // TODO: 무한스크롤
-export default function ExhibitionList() {
+const ExhibitionList = () => {
   const {
     visibleElements: { exhibitions },
     isLoading,
@@ -38,3 +42,5 @@ export default function ExhibitionList() {
     </div>
   )
 }
+
+export default React.memo(ExhibitionList)
