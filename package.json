@@ -1,6 +1,7 @@
 {
   "name": "artmap",
   "version": "0.0.0",
+  "license": "MIT",
   "description": "Simple project that shows the usage of Next.js with TypeScript",
   "author": "TOKTOKHAN.DEV<dev@toktokhan.dev>",
   "scripts": {
@@ -10,7 +11,7 @@
     "type-check": "tsc --skipLibCheck --noEmit",
     "lint": "yarn type-check && next lint",
     "lint:staged": "lint-staged",
-    "start": "yarn build && next start",
+    "start": "pnpm build && next start",
     "test": "jest --coverage --coverageReporters=text-summary",
     "test:watch": "jest --watch",
     "clean-up": "node src/scripts/remove-unnecessary.js",
