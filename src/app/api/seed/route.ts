@@ -4,6 +4,7 @@ import { PrismaClient } from '@prisma/client'
 
 import { isValid, parse } from 'date-fns'
 import { parseStringPromise } from 'xml2js'
+import {cache} from "browserslist";
 
 const prisma = new PrismaClient()
 
@@ -23,6 +24,9 @@ export async function GET() {
 
     const response = await fetch(
       `http://www.culture.go.kr/openapi/rest/publicperformancedisplays/area?from=20240801&sortStdr=3&rows=999&cPage=1&ServiceKey=${API_KEY}`,
+        {
+          cache: "no-cache",
+        }
     )
 
     if (!response.ok) {
