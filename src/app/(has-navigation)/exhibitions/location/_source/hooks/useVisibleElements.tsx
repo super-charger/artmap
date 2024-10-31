@@ -4,7 +4,8 @@ import { useGetExhibitionsWithAreaQuery } from '@/apis/exhibitions/location/Exhi
 import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 import { useGlobalMapStore } from '@/stores/map/store'
 
-import { MAP_OPTIONS } from '../types/map'
+import { MAP_OPTIONS } from '../constants/map'
+import { useMapFilter } from './useMapFilter'
 
 /**
  * - 지도에 표시될 마커와 오버레이 데이터를 관리합니다.
@@ -18,7 +19,18 @@ export const useVisibleElements = () => {
   const bounds = useMapStateContext((state) => state.bounds)
   const zoomLevel = useMapStateContext((state) => state.zoomLevel)
 
-  const { data, isLoading, isError } = useGetExhibitionsWithAreaQuery()
+  const { status } = useMapFilter()
+
+  // 초기 데이터 로드를 위한 쿼리
+  const { data, isLoading, isError } = useGetExhibitionsWithAreaQuery({
+    variables: {
+      status,
+    },
+    options: {
+      enabled: true,
+      refetchOnWindowFocus: false,
+    },
+  })
 
   /**
    * 1. 초기 로드 시: map 객체로 bounds와 zoomLevel 계산
