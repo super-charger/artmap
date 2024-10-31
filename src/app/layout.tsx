@@ -1,20 +1,14 @@
 import { ReactNode } from 'react'
 
 import { Metadata, Viewport } from 'next'
-import { cookies } from 'next/headers'
+import Script from 'next/script'
 
-import { TokGuideDrawer } from '@/components/@Drawer/TokGuideDrawer'
-import { SideBtn } from '@/components/@Drawer/TokGuideDrawer/components/SideBtn'
-import HomeLayout from '@/components/@Layout/HomeLayout'
-import { OpenBtn } from '@/components/OpenBtn'
-import ToggleColorModeButton from '@/components/ToggleColorModeButton'
+// import { GoogleAnalytics } from "@next/third-parties/googl";
 import { ENV } from '@/configs/env'
-import { COOKIE_KEYS } from '@/constants/cookie-keys'
 import AppProvider from '@/providers/AppProvider'
-import { ThemeProvider } from '@/providers/ThemeProvider'
+import fonts from '@/theme/fonts'
 
-// import { GoogleAnalytics } from "@next/third-parties/google";
-import '../../public/fonts/pretendard/css/pretendardvariable-dynamic-subset.css'
+import '../css/index.css'
 
 /**
  *
@@ -104,17 +98,17 @@ export default async function RootLayout({
 }) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <head>{/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}</head>
-      <body suppressHydrationWarning>
-        <AppProvider>
-          <ThemeProvider
-            colorMode={cookies().get(COOKIE_KEYS.COLOR_MODE)?.value}
-          >
-            <HomeLayout content={children} />
-            <ToggleColorModeButton />
-            <OpenBtn target={<TokGuideDrawer />} button={<SideBtn />} />
-          </ThemeProvider>
-        </AppProvider>
+      <head suppressHydrationWarning>
+        <Script
+          strategy="beforeInteractive"
+          type="text/javascript"
+          src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_CLIENT}&libraries=services,clusterer&autoload=false`}
+        />
+        {/* <GoogleAnalytics gaId={ENV.GA_KEY || ""} /> */}
+      </head>
+      <body suppressHydrationWarning className={fonts.notoSansKR.variable}>
+        {/*<MSWComponent/>*/}
+        <AppProvider>{children}</AppProvider>
       </body>
     </html>
   )

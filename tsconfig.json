@@ -1,6 +1,7 @@
 {
   "extends": "@toktokhan-dev/ts-config/nextjs.json",
   "compilerOptions": {
+    "strict": true,
     "baseUrl": "src",
     "paths": {
       "@/*": ["./*"],
@@ -10,6 +11,7 @@
       "@/icons": ["./generated/icons/MyIcons.tsx"],
       "@/packageJSON": ["../package.json"]
     },
+    "types": ["kakao.maps.d.ts"],
     "incremental": true,
     "declaration": false,
     "moduleResolution": "Node",

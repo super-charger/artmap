@@ -121,6 +121,21 @@ module.exports = withBundleAnalyzer({
       {
         hostname: 'via.placeholder.com',
       },
+      {
+        hostname: 'www.culture.go.kr',
+      },
+      {
+        hostname: 'loremflickr.com',
+      },
+      {
+        hostname: 'k.kakaocdn.net',
+      },
+      {
+        hostname: 'ssl.pstatic.net',
+      },
+      {
+        hostname: 'lh3.googleusercontent.com'
+      }
     ],
   },
 })
