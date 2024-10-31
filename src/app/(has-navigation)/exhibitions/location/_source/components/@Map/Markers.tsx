@@ -1,46 +1,45 @@
 import { useCallback, useEffect, useRef } from 'react'
 
+import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 import { useGlobalMapStore } from '@/stores/map/store'
 
 import { useMarkerClusterer } from '../../hooks/useMarkerClusterer'
 import { useMarkerImage } from '../../hooks/useMarkerImage'
 import { useVisibleElements } from '../../hooks/useVisibleElements'
-import { mapEventBus } from '../../map-event-bus'
-import { MapElements, NAMESPACE_KEY } from '../../types/map'
+import { MapEventSubscriber } from '../../map-event-subscriber'
+import { MapElements } from '../../types/map'
 
 export default function Markers() {
   const map = useGlobalMapStore((state) => state.map)
+  const set = useMapStateContext((state) => state.set)
+  const eventSubscriberRef = useRef(new MapEventSubscriber())
 
   const {
     visibleElements: { markers },
   } = useVisibleElements()
+
   const clusterer = useMarkerClusterer()
   const markerImage = useMarkerImage()
-
-  // 마커 데이터 관리
   const markerDataMap = useRef(
     new Map<kakao.maps.Marker, MapElements['markers'][number]>(),
   )
 
-  // 마커 이벤트 핸들러
   const handleMarkerClick = useCallback(
     (selectedExhibition: MapElements['markers'][number]) => {
-      mapEventBus.emit(NAMESPACE_KEY, 'MARKER_CLICKED', {
-        marker: selectedExhibition,
-      })
+      set('selectedExhibition', [selectedExhibition])
     },
-    [],
+    [set],
   )
 
-  // 마커 생성 및 업데이트
   useEffect(() => {
     if (!map || !clusterer || !markerImage || !markers) return
 
-    // 기존 마커 제거
-    clusterer.clear()
-    markerDataMap.current.clear()
+    const subscriber = eventSubscriberRef.current
+    const currentMarkerDataMap = markerDataMap.current
 
-    // 새 마커 생성
+    clusterer.clear()
+    currentMarkerDataMap.clear()
+
     const newMarkers = markers.map((exhibition) => {
       const marker = new kakao.maps.Marker({
         position: new kakao.maps.LatLng(
@@ -51,14 +50,20 @@ export default function Markers() {
         clickable: true,
       })
 
-      kakao.maps.event.addListener(marker, 'click', () => {
-        const selectedExhibition = markerDataMap.current.get(marker)
-        if (selectedExhibition) {
-          handleMarkerClick(selectedExhibition)
-        }
-      })
+      subscriber.subscribe(
+        marker,
+        {
+          click: () => {
+            const selectedExhibition = currentMarkerDataMap.get(marker)
+            if (selectedExhibition) {
+              handleMarkerClick(selectedExhibition)
+            }
+          },
+        },
+        false,
+      )
 
-      markerDataMap.current.set(
+      currentMarkerDataMap.set(
         marker,
         exhibition as MapElements['markers'][number],
       )
@@ -67,6 +72,12 @@ export default function Markers() {
 
     if (newMarkers.length > 0) {
       clusterer.addMarkers(newMarkers)
+    }
+
+    return () => {
+      clusterer.clear()
+      currentMarkerDataMap.clear()
+      subscriber.unsubscribe()
     }
   }, [markers, map, clusterer, markerImage, handleMarkerClick])
 

@@ -9,11 +9,7 @@ import {
 } from '@/generated/icons/MyIcons'
 import { cn } from '@/lib/utils'
 
-const STATUS_TYPE = {
-  UPCOMING: '전시예정',
-  ONGOING: '전시중',
-  ENDED: '전시종료',
-} as const
+import { STATUS_TYPE } from '../../constants/map'
 
 const ExhibitionItem = memo((props: ExhibitionApiType) => {
   const { thumbnail, title, status, place, startDate, endDate } = props
@@ -27,7 +23,7 @@ const ExhibitionItem = memo((props: ExhibitionApiType) => {
       <div className="flex flex-col gap-3">
         <div className="relative aspect-[4/3] h-[200px] w-full overflow-hidden rounded-md bg-muted">
           <Image
-            src={thumbnail || ''}
+            src={thumbnail || 'https://via.placeholder.com/200x200'}
             alt={formattedTitle}
             fill
             className="object-cover"

@@ -1,8 +1,6 @@
 'use client'
 
-import { PropsWithChildren, useCallback } from 'react'
-
-import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { PropsWithChildren } from 'react'
 
 import {
   Sheet,
@@ -14,39 +12,29 @@ import {
 } from '@/components/ui/sheet'
 import { VerticalArrowOpenSIcon } from '@/generated/icons/MyIcons'
 
-// 1. URL 상태 관리를 위한 훅 추가
-export const useLocationState = () => {
-  const searchParams = useSearchParams()
-  const router = useRouter()
-  const pathname = usePathname()
-
-  const currentCity = searchParams.get('city') ?? '서울특별시'
-
-  const updateCity = useCallback(
-    (newCity: string) => {
-      const params = new URLSearchParams(searchParams)
-      params.set('city', newCity)
-      router.replace(`${pathname}?${params.toString()}` as any, {
-        scroll: false,
-      })
-    },
-    [pathname, router, searchParams],
-  )
-
-  return { currentCity, updateCity }
-}
+import { REVERSE_AREA_NAME_MAP } from '../../constants/map'
+import { useCurrentArea } from '../../hooks/\buseCurrentArea'
+import { useMapFilter } from '../../hooks/useMapFilter'
 
 export default function LocationSettingSeet({
   children,
   ...props
 }: PropsWithChildren) {
-  const { currentCity } = useLocationState()
+  // 필터 쿼리 파라미터
+  const {
+    queryParams: { area },
+  } = useMapFilter()
+
+  // // 현재 지도 중심점에서 가장 가까운 지역
+  const currentArea = useCurrentArea()
 
   return (
     <Sheet {...props}>
       <SheetTrigger asChild>
         <button className="flex gap-0.5 p-0">
-          <p className="mobile-title-small">{currentCity}</p>
+          <p className="mobile-title-small">
+            {REVERSE_AREA_NAME_MAP[area] ?? REVERSE_AREA_NAME_MAP[currentArea]}
+          </p>
           <VerticalArrowOpenSIcon />
         </button>
       </SheetTrigger>

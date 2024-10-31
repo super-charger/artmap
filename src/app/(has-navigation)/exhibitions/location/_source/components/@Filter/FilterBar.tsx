@@ -11,7 +11,7 @@ import LocationSettingSeet from './LocationSettingSeet'
 
 const FilterBar = () => {
   return (
-    <div className="absolute z-10 mx-auto w-full max-w-xl px-4 py-5">
+    <div className="absolute z-10 mx-auto w-full max-w-screen-sm px-4 py-5">
       <div className="flex h-[40px] w-full items-center gap-2 rounded-full border border-gray-200 bg-grayscale_white px-4 py-2.5 shadow-sm">
         {/* 위치 설정 */}
         <LocationSettingSeet>

@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 
-// 추가
 import { zodResolver } from '@hookform/resolvers/zod'
 import '@radix-ui/react-dialog'
 import { useQueryClient } from '@tanstack/react-query'
@@ -14,7 +13,6 @@ import {
   EXHIBITIONS_API_QUERY_KEY,
   useUpdateExhibitionFilterMutation,
 } from '@/apis/exhibitions/location/ExhibitionsLoctionApi.query'
-import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 import {
   Dialog,
   DialogContent,
@@ -35,53 +33,13 @@ import {
   VerticalArrowOpenLIcon,
 } from '@/generated/icons/MyIcons'
 
-import { AREA_NAME_MAP } from '../../constants/map'
-import { useVisibleElements } from '../../hooks/useVisibleElements'
-import { useLocationState } from './LocationSettingSeet'
-
-const areaCenterPosition: Record<
-  string,
-  { latitude: number; longitude: number }
-> = {
-  서울특별시: { latitude: 37.5665, longitude: 126.978 },
-  강원도: { latitude: 37.8228, longitude: 128.1555 },
-  경기도: { latitude: 37.2636, longitude: 127.0286 },
-  경상남도: { latitude: 35.4606, longitude: 128.2132 },
-  경상북도: { latitude: 36.576, longitude: 128.505 },
-  광주광역시: { latitude: 35.1595, longitude: 126.8526 },
-  대구광역시: { latitude: 35.8714, longitude: 128.6014 },
-  대전광역시: { latitude: 36.3504, longitude: 127.3845 },
-  부산광역시: { latitude: 35.1796, longitude: 129.0756 },
-  세종특별자치시: { latitude: 36.48, longitude: 127.289 },
-  울산광역시: { latitude: 35.5384, longitude: 129.3114 },
-  인천광역시: { latitude: 37.4563, longitude: 126.7052 },
-  전라남도: { latitude: 34.8679, longitude: 126.991 },
-  전라북도: { latitude: 35.7175, longitude: 127.153 },
-  제주특별자치도: { latitude: 33.489, longitude: 126.4983 },
-  충청남도: { latitude: 36.6588, longitude: 126.6728 },
-  충청북도: { latitude: 36.6357, longitude: 127.4914 },
-} as const
-
-// 도시 데이터
-const CITIES = [
-  '서울특별시',
-  '강원도',
-  '경기도',
-  '경상남도',
-  '경상북도',
-  '광주광역시',
-  '대구광역시',
-  '대전광역시',
-  '부산광역시',
-  '세종특별자치시',
-  '울산광역시',
-  '인천광역시',
-  '전라남도',
-  '전라북도',
-  '제주특별자치도',
-  '충청남도',
-  '충청북도',
-] as const
+import {
+  AREA_NAME_MAP,
+  CITIES,
+  REVERSE_AREA_NAME_MAP,
+} from '../../constants/map'
+import { useMapFilter } from '../../hooks/useMapFilter'
+import { useRecentLocationsStorage } from '../../store/recentLocationStorage'
 
 const FormSchema = z.object({
   city: z.string().min(1),
@@ -97,62 +55,67 @@ export default function LocationSettingForm({
 }: LocationSettingFormProps) {
   const queryClient = useQueryClient()
 
-  const {
-    mutate: updateFilter,
-    isPending,
-    isSuccess,
-    isError,
-  } = useUpdateExhibitionFilterMutation({
-    options: {
-      onSuccess: (data, variables) => {
-        queryClient.setQueryData(
-          EXHIBITIONS_API_QUERY_KEY.UPDATE_EXHIBITIONS_WITH_AREA(),
-          data,
-        )
-
-        const seletedAreaName = AREA_NAME_MAP[form.getValues('city')]
-
-        const areaGroup = data.areaGroups.find(
-          (group) => group.area === seletedAreaName,
-        )
-
-        if (areaGroup) {
-          set('center', {
-            latitude: areaGroup.position.lat,
-            longitude: areaGroup.position.lng,
-          })
-        }
-      },
-      onError: (error) => {
-        console.log(error)
-      },
-    },
-  })
-
-  const visibleAreas = useMapStateContext((state) => state.visibleAreas)
-
   const [isCityDialogOpen, setIsCityDialogOpen] = useState(false)
 
-  const { currentCity, updateCity } = useLocationState()
+  const recentLocations = useRecentLocationsStorage((state) => state.locations)
+  const setRecentLocations = useRecentLocationsStorage((state) => state.set)
 
-  const set = useMapStateContext((state) => state.set)
+  const { area, updateFilter } = useMapFilter()
 
-  // 현재 보고 있는 위치를 저장해야함
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      city: currentCity,
+      city: REVERSE_AREA_NAME_MAP[area] ?? '',
       // district: '마포구',
     },
   })
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    updateCity(data.city)
-    const areaName = AREA_NAME_MAP[data.city]
-    updateFilter({ area: areaName })
-  }
-
   const selectedCity = form.watch('city')
+
+  const { mutate: updateFilterMutation, isPending } =
+    useUpdateExhibitionFilterMutation({
+      options: {
+        onSuccess: (data, variables) => {
+          queryClient.setQueryData(
+            EXHIBITIONS_API_QUERY_KEY.UPDATE_EXHIBITIONS_WITH_AREA({
+              area: variables?.area,
+            }),
+            data,
+          )
+        },
+        onError: (error) => {
+          console.log(error)
+        },
+      },
+    })
+
+  const onSubmit = (formData: z.infer<typeof FormSchema>) => {
+    // 필터 업데이트 (url)
+    updateFilter({ newArea: AREA_NAME_MAP[formData.city] })
+
+    // 필터 업데이트 (api)
+    updateFilterMutation({ area: AREA_NAME_MAP[formData.city] })
+
+    // 최근 지역 추가
+    setRecentLocations((state) => {
+      // 중복 제거
+      state.locations = state.locations.filter(
+        (loc) => loc.area !== formData.city,
+      )
+
+      // 새 위치 추가
+      state.locations.unshift({
+        area: formData.city,
+      })
+
+      // 최대 개수 유지
+      if (state.locations.length > state.maxItems) {
+        state.locations.pop()
+      }
+
+      return state
+    })
+  }
 
   return (
     <>
@@ -175,7 +138,7 @@ export default function LocationSettingForm({
                       onClick={() => setIsCityDialogOpen(true)}
                     >
                       <span className="mobile-text text-grayscale_black">
-                        {field.value}
+                        {field.value || '-'}
                       </span>
                       <VerticalArrowOpenLIcon width={24} height={24} />
                     </button>
@@ -212,12 +175,24 @@ export default function LocationSettingForm({
                 최근 지역
               </FormLabel>
               <div className="flex gap-2 pt-[10px]">
-                <span className="mobile-text-small inline-flex items-center gap-[10px] rounded-full border border-grayscale_gray2 px-3 py-1 text-grayscale_gray4">
-                  제주 서귀포시 <SystemXiconSGray4Icon width={10} height={10} />
-                </span>
-                <span className="mobile-text-small inline-flex items-center gap-[10px] rounded-full border border-grayscale_gray2 px-3 py-1 text-grayscale_gray4">
-                  서울 종로구 <SystemXiconSGray4Icon width={10} height={10} />
-                </span>
+                {recentLocations.map((location) => (
+                  <button
+                    key={location.area}
+                    type="button"
+                    className="mobile-text-small inline-flex items-center gap-[10px] rounded-full border border-grayscale_gray2 px-3 py-1 text-grayscale_gray4"
+                    onClick={() => {
+                      setRecentLocations((state) => ({
+                        ...state,
+                        locations: state.locations.filter(
+                          (loc) => loc.area !== location.area,
+                        ),
+                      }))
+                    }}
+                  >
+                    <span>{location.area}</span>{' '}
+                    <SystemXiconSGray4Icon width={10} height={10} />
+                  </button>
+                ))}
               </div>
             </div>
             {actions(isPending)}
@@ -225,7 +200,6 @@ export default function LocationSettingForm({
         </form>
       </Form>
 
-      {/* 도시 선택 다이얼로그 */}
       <Dialog open={isCityDialogOpen} onOpenChange={setIsCityDialogOpen}>
         <DialogContent
           hideCloseButton

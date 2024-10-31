@@ -1,22 +1,23 @@
+'use client'
+
+import React from 'react'
+
 import { ExhibitionApiType } from '@/apis/exhibitions/types/model/map'
 
 import { useVisibleElements } from '../../hooks/useVisibleElements'
-import ExhibitionSkeleton from './ExhibitionSkeleton'
 import ExhibitionItem from './ExhibitionItem'
+import ExhibitionSkeleton from './ExhibitionSkeleton'
 
-export default function ExhibitionList() {
+// TODO: 무한스크롤
+const ExhibitionList = () => {
   const {
     visibleElements: { exhibitions },
     isLoading,
-    error,
+    isError,
   } = useVisibleElements()
 
-  if (error) {
-    return (
-      <div className="text-red-500">
-        Error loading exhibitions: {error.message}
-      </div>
-    )
+  if (isError) {
+    return <div className="text-red-500">Error loading exhibitions</div>
   }
 
   if (isLoading) {
@@ -41,3 +42,5 @@ export default function ExhibitionList() {
     </div>
   )
 }
+
+export default React.memo(ExhibitionList)
