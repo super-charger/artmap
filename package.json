@@ -11,7 +11,7 @@
     "type-check": "tsc --skipLibCheck --noEmit",
     "lint": "yarn type-check && next lint",
     "lint:staged": "lint-staged",
-    "start": "pnpm build && next start",
+    "start": "prisma generate && pnpm build && next start",
     "test": "jest --coverage --coverageReporters=text-summary",
     "test:watch": "jest --watch",
     "clean-up": "node src/scripts/remove-unnecessary.js",
