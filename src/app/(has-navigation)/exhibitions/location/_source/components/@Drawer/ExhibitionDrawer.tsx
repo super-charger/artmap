@@ -2,6 +2,8 @@
 
 import { useState } from 'react'
 
+import dynamic from 'next/dynamic'
+
 import {
   Drawer,
   DrawerContent,
@@ -10,7 +12,10 @@ import {
   DrawerTitle,
 } from '@/components/ui/drawer'
 
-import ExhibitionList from './ExhibitionList'
+const ExhibitionList = dynamic(() => import('./ExhibitionList'), {
+  loading: () => <div>로딩중...</div>,
+  ssr: false,
+})
 
 export default function ExhibitionDrawer() {
   const [isOpen, setIsOpen] = useState(true)
@@ -20,7 +25,7 @@ export default function ExhibitionDrawer() {
       open={isOpen}
       onOpenChange={setIsOpen}
       shouldScaleBackground={false}
-      snapPoints={[0.15, 1]}
+      snapPoints={[0.17, 1]}
       dismissible={false}
     >
       <DrawerContent

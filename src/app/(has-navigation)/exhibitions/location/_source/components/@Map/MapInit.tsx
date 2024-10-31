@@ -5,10 +5,10 @@ import { useEffect, useRef } from 'react'
 import { useCreateMap } from '@/app/(has-navigation)/exhibitions/location/_source/hooks/useCreateMap'
 import { useGlobalMapStore } from '@/stores/map/store'
 
+import { MAP_OPTIONS } from '../../constants/map'
 import { mapEventBus } from '../../map-event-bus'
 import { MapEventSubscriber } from '../../map-event-subscriber'
-import { MAP_OPTIONS, NAMESPACE_KEY } from '../../types/map'
-import { MapSkeleton } from './MapSkeleton'
+import { NAMESPACE_KEY } from '../../types/map'
 
 type MapProps = {
   options: {
@@ -22,7 +22,7 @@ type MapProps = {
 
 export default function MapInit({ options, ...props }: MapProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const { initialize, isLoading } = useCreateMap(options)
+  const { initialize } = useCreateMap(options)
   const eventSubscriberRef = useRef(new MapEventSubscriber())
 
   const set = useGlobalMapStore((state) => state.set)
@@ -59,6 +59,25 @@ export default function MapInit({ options, ...props }: MapProps) {
               level,
             })
           },
+          center_changed: () => {
+            const center = mapInstance.getCenter()
+            const level = mapInstance.getLevel()
+
+            mapEventBus.emit(NAMESPACE_KEY, 'CENTER_CHANGED', {
+              center,
+              level,
+            })
+          },
+          drag: () => {
+            const center = mapInstance.getCenter()
+            const level = mapInstance.getLevel()
+
+            mapEventBus.emit(NAMESPACE_KEY, 'DRAGGING', {
+              center,
+              level,
+              isDragging: true,
+            })
+          },
         })
       } catch (error) {
         console.error('Map initialization failed:', error)
@@ -73,10 +92,5 @@ export default function MapInit({ options, ...props }: MapProps) {
     }
   }, [initialize, reset, set])
 
-  return (
-    <>
-      {isLoading && <MapSkeleton />}
-      <div ref={containerRef} className="h-screen w-full" {...props} />
-    </>
-  )
+  return <div ref={containerRef} className="h-screen w-full" {...props} />
 }

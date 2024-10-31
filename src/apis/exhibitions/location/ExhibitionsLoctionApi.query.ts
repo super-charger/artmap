@@ -1,15 +1,19 @@
-import { ExhibitionStatus } from '@prisma/client'
 import { useMutation, useQuery } from '@tanstack/react-query'
 
 import { getExhibitionsWithArea } from '@/app/(has-navigation)/exhibitions/location/_source/actions/getExhibitionsWithArea'
 import { UseMutationParams } from '@/types/module/react-query/use-mutation-params'
 import { UseQueryParams } from '@/types/module/react-query/use-query-params'
 
+import { ExhibitionStatus } from '../types/model/map'
+
 export const EXHIBITIONS_API_QUERY_KEY = {
-  GET_EXHIBITIONS_WITH_AREA: () => ['create-exhibitions-with-area'],
-  UPDATE_EXHIBITIONS_WITH_AREA: (params?: {
-    area?: string
+  GET_EXHIBITIONS_WITH_AREA: (params?: {
     status?: ExhibitionStatus
+    area?: string
+  }) => ['create-exhibitions-with-area', params],
+  UPDATE_EXHIBITIONS_WITH_AREA: (params?: {
+    status?: ExhibitionStatus
+    area?: string
   }) => ['update-exhibitions-with-area', params],
 }
 
@@ -17,10 +21,12 @@ export const EXHIBITIONS_API_QUERY_KEY = {
 export function useGetExhibitionsWithAreaQuery(
   queryParams?: UseQueryParams<typeof getExhibitionsWithArea>,
 ) {
-  const queryKey = EXHIBITIONS_API_QUERY_KEY.GET_EXHIBITIONS_WITH_AREA()
+  const queryKey = EXHIBITIONS_API_QUERY_KEY.GET_EXHIBITIONS_WITH_AREA(
+    queryParams?.variables,
+  )
   return useQuery({
     queryKey,
-    queryFn: () => getExhibitionsWithArea(),
+    queryFn: () => getExhibitionsWithArea(queryParams?.variables),
     ...queryParams?.options,
   })
 }
