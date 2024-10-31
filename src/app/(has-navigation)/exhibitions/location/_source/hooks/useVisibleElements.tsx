@@ -5,6 +5,7 @@ import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 import { useGlobalMapStore } from '@/stores/map/store'
 
 import { MAP_OPTIONS } from '../types/map'
+import {OverlayApiType} from "@/apis/exhibitions/types/model/map";
 
 /**
  * - 지도에 표시될 마커와 오버레이 데이터를 관리합니다.
@@ -46,7 +47,7 @@ export const useVisibleElements = () => {
     const filteredMarkers = !isOverlayZoom ? visibleExhibitions : []
     const filteredOverlays =
       isOverlayZoom ?
-        data.areaGroups.filter((overlay) =>
+        data.areaGroups.filter((overlay:OverlayApiType) =>
           currentBounds.contain(
             new kakao.maps.LatLng(overlay.position.lat, overlay.position.lng),
           ),
