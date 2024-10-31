@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 
 import { useGlobalMapStore } from '@/stores/map/store'
 
-import { MARKER_CONSTANTS } from '../types/map'
+import { MARKER_CONSTANTS } from '../constants/map'
 
 export const useMarkerImage = () => {
   const map = useGlobalMapStore((state) => state.map)
