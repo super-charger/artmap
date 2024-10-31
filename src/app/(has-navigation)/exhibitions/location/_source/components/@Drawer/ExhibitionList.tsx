@@ -1,7 +1,7 @@
 import { ExhibitionApiType } from '@/apis/exhibitions/types/model/map'
 
 import { useVisibleElements } from '../../hooks/useVisibleElements'
-import ExhibitionSkeleton from './\bExhibitionSkeleton'
+import ExhibitionSkeleton from './ExhibitionSkeleton'
 import ExhibitionItem from './ExhibitionItem'
 
 export default function ExhibitionList() {
