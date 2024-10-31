@@ -1,8 +1,16 @@
+'use client'
 import OnboardingHeader from "@/components/Onboarding/OnboardingHeader";
 import Link from "next/link";
 import Image from "next/image";
+import OnboardingLink from "@/components/Onboarding/OnboardingLink";
+import AnalyzeFooter from "@/components/Onboarding/Analyze/AnalyzeFooter";
+import {useRouter} from "next/navigation";
 
 export default function Page() {
+    const router = useRouter();
+    const buttonClick = () => {
+        router.push('/onboarding/analyze2')
+    }
     return (
         <>
             <OnboardingHeader/>
@@ -14,17 +22,11 @@ export default function Page() {
                 className="text-[#1a1a1a] text-[26px] font-bold font-['Noto Sans KR'] leading-[38px]">나에게 딱 맞는 <br/>전시 추천</span><span
                 className="text-[#1a1a1a] text-[26px] font-normal font-['Noto Sans KR'] leading-[38px]">을 받아보세요.</span>
             </div>
-            <Image className="left-[16px] top-[261px] relative"
-                   src="/images/analyze.png" width={343} height={320} alt={"analyze"}/>
-            <Link href={"/onboarding/analyze2"}
-                  className="w-full h-[50px] px-[15px] relative bg-black rounded-[5px] justify-center items-center gap-2.5 inline-flex">
-                <div className="text-white text-base font-bold font-['Noto Sans KR'] leading-7">취향분석 시작</div>
-            </Link>
-            <Link href={"/home/now"}
-                  className="relative text-center text-[#808080] text-base font-normal font-['Noto Sans KR'] underline leading-7">다음에
-                할래요
-            </Link>
-
+            <div className="flex flex-col items-center justify-between w-full mt-40">
+                <Image className="relative"
+                       src="/images/analyze.png" width={343} height={320} alt={"analyze"}/>
+            </div>
+            <AnalyzeFooter  onClick={buttonClick} buttonText={'취향분석 시작'} nextButton={'다음에 할래요'}/>
         </>
     )
 }

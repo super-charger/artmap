@@ -36,14 +36,14 @@ export default function NowPage() {
       background: 'bg-now_poster1_background',
       imageSrc: MY_IMAGES.HOME_NOW_POSTER_1.src,
       title: 'Terrarium',
-      date: '2021.08.17 ~ 2021.09.09',
+      date: '2024.08.17 ~ 2021.09.09',
       place: '중간지점',
     },
     {
       background: 'bg-now_poster2_background',
       imageSrc: MY_IMAGES.HOME_NOW_POSTER_2.src,
       title: '슈퍼픽션',
-      date: '2021.08.17 ~ 2021.09.09',
+      date: '2024.08.17 ~ 2021.09.09',
       place: '세화미술관',
     },
   ]
@@ -51,13 +51,13 @@ export default function NowPage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const ongoingResponse = await getOngoingExhibitions()
-        const upcomingResponse = await getUpcomingExhibitions()
+        const ongoingResponse = await getOngoingExhibitions("서울")
+        const upcomingResponse = await getUpcomingExhibitions("서울")
 
         setExhibitionsData([ongoingResponse.data, upcomingResponse.data])
-        setLoading(false)
       } catch (error) {
         console.error('Error fetching exhibitions:', error)
+      } finally {
         setLoading(false)
       }
     }
@@ -121,8 +121,9 @@ export default function NowPage() {
               .fill(0)
               .map((_, index) => (
                 <div key={index} className="rounded bg-white p-3 shadow-md">
-                  <Skeleton height={200} />
-                  <Skeleton count={3} className="mt-2" />
+                  <Skeleton height={200} className="mb-2 rounded" />
+                  <Skeleton height={20} className="my-1" />
+                  <Skeleton height={20} width="60%" />
                 </div>
               ))}
           </div>

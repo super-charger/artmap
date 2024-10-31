@@ -1,25 +1,67 @@
+// ExhibitionPage.tsx
 'use client'
 
 import { useEffect, useState } from 'react'
-
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-import { getAllExhibitions } from '@/actions/getExhibitions'
+import {
+  getAllExhibitions,
+  getOngoingExhibitions,
+  getUpcomingExhibitions,
+  getAllUpcomingExhibitions,
+} from '@/actions/getExhibitions'
 import { PAGE_ROUTES } from '@/constants/routes'
+
+import FilterModal from './FilterModal'
+
+// HTML 엔티티를 디코딩하는 함수
+function decodeHtmlEntities(text: string) {
+  const txt = document.createElement('textarea')
+  txt.innerHTML = text
+  return txt.value
+}
 
 export default function ExhibitionPage() {
   const [exhibitions, setExhibitions] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false)
+  const [isOn, setIsOn] = useState(true)
+  const [selectedRegion, setSelectedRegion] = useState<string>('전체')
+
+  const router = useRouter()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const result = await getAllExhibitions()
-        setExhibitions(result.data.flat() as any[]) // 데이터를 플랫하게 해서 하나의 배열로 만듦
+        setIsLoading(true)
+        const region = searchParams.get('region') || '전체'
+        const status = searchParams.get('status') || 'ONGOING'
+
+        let response
+        if (region === '전체' && status === 'ONGOING') {
+          response = await getAllExhibitions()
+        } else if (region === '전체' && status === 'UPCOMING_AND_ENDED') {
+          response = await getAllUpcomingExhibitions()
+        } else if (status === 'ONGOING') {
+          response = await getOngoingExhibitions(region)
+        } else {
+          response = await getUpcomingExhibitions(region)
+        }
+
+        // 응답이 존재하면 데이터를 디코딩하고 설정
+        if (response && response.data) {
+          const decodedData = response.data.map((exhibition: any) => ({
+            ...exhibition,
+            title: decodeHtmlEntities(exhibition.title),
+          }))
+          setExhibitions(decodedData)
+        }
       } catch (error) {
         console.error('Error fetching exhibitions:', error)
       } finally {
@@ -27,7 +69,15 @@ export default function ExhibitionPage() {
       }
     }
     fetchData()
-  }, [])
+  }, [searchParams])
+
+  const toggleFilterModal = () => {
+    setIsFilterModalOpen(!isFilterModalOpen)
+  }
+
+  const toggleSwitch = () => {
+    setIsOn(!isOn)
+  }
 
   return (
     <>
@@ -50,8 +100,6 @@ export default function ExhibitionPage() {
               </Link>
             </li>
           </ul>
-
-          {/* 돋보기 버튼 */}
           <button className="ml-auto">
             <Image
               src="/icons/system/search-black.svg"
@@ -65,7 +113,6 @@ export default function ExhibitionPage() {
 
       {/* 옵션 패널 */}
       <div className="fixed left-0 right-0 top-[60px] z-40 m-auto flex h-[68.5px] w-full max-w-screen-sm items-center justify-between bg-white px-[12px]">
-        {/* 최신순 텍스트 */}
         <div className="mobile-title flex items-center">
           최신순
           <Image
@@ -77,7 +124,6 @@ export default function ExhibitionPage() {
           />
         </div>
 
-        {/* 오른쪽 버튼들 */}
         <div className="flex items-center gap-2">
           <button>
             <Image
@@ -87,7 +133,8 @@ export default function ExhibitionPage() {
               height={24}
             />
           </button>
-          <button className="ml-2">
+
+          <button className="ml-2" onClick={toggleFilterModal}>
             <Image
               src="/icons/system/filter-black.svg"
               alt="Filter Icon"
@@ -124,10 +171,7 @@ export default function ExhibitionPage() {
                     className="rounded"
                   />
                 </div>
-                <div
-                  className="justify-left my-1 flex"
-                  style={{ marginTop: '12px', marginBottom: '9px' }}
-                >
+                <div className="justify-left my-1 flex">
                   {exhibition.status === 'ONGOING' && (
                     <Image
                       src="/icons/content/exhibition-ongoing.svg"
@@ -159,15 +203,28 @@ export default function ExhibitionPage() {
                 <h3 className="mb-1 text-lg font-semibold">
                   {exhibition.title}
                 </h3>
-                <p className="text-sm text-gray-600">
-                  {`${new Date(exhibition.startDate).toLocaleDateString()} ~ ${new Date(exhibition.endDate).toLocaleDateString()}`}
-                </p>
+                <p className="text-sm text-gray-600">{`${new Date(
+                  exhibition.startDate,
+                ).toLocaleDateString()} ~ ${new Date(
+                  exhibition.endDate,
+                ).toLocaleDateString()}`}</p>
                 <p className="text-sm text-gray-600">{exhibition.place}</p>
               </div>
             ))
           }
         </div>
       </main>
+
+      {/* 필터 모달 */}
+      {isFilterModalOpen && (
+        <FilterModal
+          closeModal={toggleFilterModal}
+          isOn={isOn}
+          toggleSwitch={toggleSwitch}
+          selectedRegion={selectedRegion}
+          setSelectedRegion={setSelectedRegion}
+        />
+      )}
     </>
   )
 }

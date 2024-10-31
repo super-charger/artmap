@@ -1,12 +1,15 @@
-'use client';
 import Image from "next/image";
 import Link from "next/link";
 import OnboardingButton from "@/components/Onboarding/OnboardingButton";
+import {signIn} from "@/auth";
 
 export default function OnboardingLoginForm() {
     return (
         <>
-            <form className="h-[388px] m-[16px]">
+            <form className="h-[388px] m-[16px]" action={async (formData) => {
+                "use server"
+                await signIn('credentials', formData)
+            }}>
                 <div className="flex items-center h-[40px] mb-10 border-b-2 border-grayscale_black">
                     <label htmlFor="email" className="flex-shrink-0">
                         <Image src={"/icons/login/id.svg"} alt={"id 아이콘"} height={24} width={24} className="mr-2"/>
@@ -14,8 +17,9 @@ export default function OnboardingLoginForm() {
                     <input
                         type="email"
                         id="email"
+                        name="email"
                         placeholder="이메일"
-                        className="flex-grow text-[#bebebe] text-base font-normal font-['Noto Sans KR'] leading-7"
+                        className="flex-grow text-black text-base font-normal font-['Noto Sans KR'] leading-7"
                     />
                 </div>
                 <div className="flex items-center h-[40px] border-b-2 border-grayscale_black">
@@ -26,8 +30,9 @@ export default function OnboardingLoginForm() {
                     <input
                         type="password"
                         id="password"
+                        name="password"
                         placeholder="비밀번호 입력"
-                        className="flex-grow text-[#bebebe] text-base font-normal font-['Noto Sans KR'] leading-7"
+                        className="flex-grow text-black text-base font-normal font-['Noto Sans KR'] leading-7"
                     />
                 </div>
                 <div className="flex h-[28px] mt-[25px] items-center">
@@ -35,7 +40,7 @@ export default function OnboardingLoginForm() {
                     <div
                         className="text-center text-[#808080] text-base font-normal font-['Noto Sans KR'] leading-7">자동로그인
                     </div>
-                    <Link href="/find-password"
+                    <Link href="/onboarding/signup"
                         className="ml-auto text-right text-[#808080] text-base font-normal font-['Noto Sans KR'] underline leading-7">비밀번호
                         찾기
                     </Link>
@@ -43,7 +48,7 @@ export default function OnboardingLoginForm() {
                 <div className="flex flex-col justify-end items-center h-full">
                     <OnboardingButton bgColor={'black'} className="">로그인</OnboardingButton>
                     <Link
-                        href={"/email-signup"}
+                        href={"/onboarding/signup"}
                         className="text-center text-[#808080] text-base font-normal font-['Noto Sans KR'] underline leading-7 justify-center items-center mb-10 mt-5">회원가입
                     </Link>
                 </div>
