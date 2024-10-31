@@ -4,7 +4,7 @@ import {UrlObject} from "url";
 type onboardingLinkProps = {
   bgColor: 'gray' | 'black' | 'purple' | 'white'
   children: React.ReactNode
-  href: string | UrlObject
+  href: string
 }
 export default function OnboardingLink({
   bgColor,
@@ -23,11 +23,11 @@ export default function OnboardingLink({
     bgClass = 'bg-white'
     textColor = 'text-grayscale_black'
   }
+  const link = new URL(href,`${process.env.NEXT_PUBLIC_BASE_URL}`)
 
   return (
-    // TODO: @dave17code 타입 수정 부탁드려용. 일단 커밋
     <Link
-      href={href}
+      href={link}
       className={`${bgClass} relative z-20 inline-flex h-[50px] w-11/12 items-center justify-center rounded-[5px] px-[15px] hover:opacity-75`}
     >
       <div
