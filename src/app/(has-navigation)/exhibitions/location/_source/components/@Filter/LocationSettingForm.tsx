@@ -13,7 +13,6 @@ import {
   EXHIBITIONS_API_QUERY_KEY,
   useUpdateExhibitionFilterMutation,
 } from '@/apis/exhibitions/location/ExhibitionsLoctionApi.query'
-import { useMapStateContext } from '@/app/_source/context/useMapStateContext'
 import {
   Dialog,
   DialogContent,
