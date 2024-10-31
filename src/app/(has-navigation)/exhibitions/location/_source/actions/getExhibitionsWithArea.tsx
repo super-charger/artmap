@@ -6,6 +6,7 @@ import { OverlayApiType } from '@/apis/exhibitions/types/model/map'
 import prisma from '@/apis/prismaClient'
 
 import { areaCenterPosition, defaultPosition } from '../constants/map'
+import {$Enums} from ".prisma/client";
 
 interface GetExhibitionsParams {
   area?: string
@@ -41,7 +42,7 @@ export async function getExhibitionsWithArea({
 
     // 지역별 그룹
     const groupedByArea = exhibitions.reduce(
-      (acc : Record<string,OverlayApiType>, exhibition) => {
+      (acc, exhibition) => {
         const area = exhibition.area
         if (!acc[area]) {
           acc[area] = {
