@@ -6,7 +6,7 @@ import {signIn} from "@/auth";
 export default function OnboardingLoginForm() {
     return (
         <>
-            <form className="h-[388px] m-[16px]" action={async (formData) => {
+            <form className="h-[300px] m-[16px]" action={async (formData) => {
                 "use server"
                 await signIn('credentials', formData)
             }}>
