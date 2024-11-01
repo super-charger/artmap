@@ -11,7 +11,7 @@
     "type-check": "tsc --skipLibCheck --noEmit",
     "lint": "yarn type-check && next lint",
     "lint:staged": "lint-staged",
-    "start": "pnpm build && next start",
+    "start": "next start",
     "test": "jest --coverage --coverageReporters=text-summary",
     "test:watch": "jest --watch",
     "clean-up": "node src/scripts/remove-unnecessary.js",
@@ -21,7 +21,8 @@
     "semantic-release": "semantic-release",
     "checklist:progress": "node src/scripts/update-checklist-progress.js",
     "prepare": "husky",
-    "mock": "npx tsx watch ./src/__mocks__/http.ts"
+    "mock": "npx tsx watch ./src/__mocks__/http.ts",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@auth/core": "^0.37.2",

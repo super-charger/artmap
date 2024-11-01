@@ -7,7 +7,6 @@ import {
 import prisma from '@/apis/prismaClient'
 
 import { areaCenterPosition, defaultPosition } from '../constants/map'
-import {$Enums} from ".prisma/client";
 
 interface GetExhibitionsParams {
   area?: string

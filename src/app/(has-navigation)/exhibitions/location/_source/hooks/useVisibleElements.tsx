@@ -82,7 +82,7 @@ export const useVisibleElements = () => {
       // 영역 오버레이: 줌 레벨 >= OVERLAY
       overlays:
         isOverlayZoom && !isDetailZoom ?
-          data.areaGroups.filter((overlay) =>
+          data.areaGroups.filter((overlay:any) =>
             currentBounds.contain(
               new kakao.maps.LatLng(overlay.position.lat, overlay.position.lng),
             ),
